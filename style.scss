@@ -1,0 +1,72 @@
+// // font-family google fonts import
+//
+//     font-family: 'Signika', sans-serif;
+//     font-family: 'Archivo Narrow', sans-serif;
+//     font-family: 'Amatic SC', cursive;
+// //
+$principal-color :rgb(157, 156, 79);
+$button-color: rgb(87, 158, 181);
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.container{
+    border: 0.5em ridge rgb(23, 103, 142);
+    padding: 1vmin 1vmax;
+}
+
+.form-group{
+  width: 25vmax;
+  font-family: 'Signika' , sans-serif;
+  border: none;
+}
+
+#submit{
+  border: none;
+  background: none;
+  font-family: 'Archivo Narrow', cursive;
+  margin-top: 12px;
+  font-size: 1.5em;
+  color: $button-color;
+  transition: all 0.5s linear;
+  &:hover{
+    color: $principal-color;
+  }
+}
+
+#titre{
+  font-size: 3em;
+  color: $principal-color;
+  font-family: 'Amatic SC', fantasy;
+  font-weight: bold;
+}
+
+#inscription{
+  margin-left: 3vmax;
+  font-size: 1.5em;
+  font-family: 'Archivo Narrow', cursive;
+  text-decoration: none;
+  color: $button-color;
+  transition: all .5s linear;
+  &:hover{
+    color: $principal-color;
+  }
+}
+
+input{
+  border:none;
+  border-bottom: 1px solid rgb(42, 42, 42);
+  margin-left: 0.3em;
+  padding-left: 0.3em;
+}

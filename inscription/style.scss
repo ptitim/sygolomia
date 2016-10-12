@@ -1,0 +1,19 @@
+$principal-color :rgb(209, 206, 31);
+$button-color: rgb(87, 158, 181);
+
+#submit{
+  margin-left: 3vmax;
+  font-size: 1.5em;
+  font-family: 'Archivo Narrow', cursive;
+  text-decoration: none;
+  color: $button-color;
+  transition: all .5s linear;
+  &:hover{
+    color: $principal-color;
+  }
+}
+
+#wrong{
+  display: none;
+  color: rgb(171, 16, 16);
+}

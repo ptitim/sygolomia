@@ -1,0 +1,55 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw; }
+
+.container {
+  border: 0.5em ridge #17678e;
+  padding: 1vmin 1vmax; }
+
+.form-group {
+  width: 25vmax;
+  font-family: 'Signika' , sans-serif;
+  border: none; }
+
+#submit {
+  border: none;
+  background: none;
+  font-family: 'Archivo Narrow', cursive;
+  margin-top: 12px;
+  font-size: 1.5em;
+  color: #579eb5;
+  transition: all 0.5s linear; }
+  #submit:hover {
+    color: #9d9c4f; }
+
+#titre {
+  font-size: 3em;
+  color: #9d9c4f;
+  font-family: 'Amatic SC', fantasy;
+  font-weight: bold; }
+
+#inscription {
+  margin-left: 3vmax;
+  font-size: 1.5em;
+  font-family: 'Archivo Narrow', cursive;
+  text-decoration: none;
+  color: #579eb5;
+  transition: all .5s linear; }
+  #inscription:hover {
+    color: #9d9c4f; }
+
+input {
+  border: none;
+  border-bottom: 1px solid #2a2a2a;
+  margin-left: 0.3em;
+  padding-left: 0.3em; }
+
+/*# sourceMappingURL=style.css.map */
