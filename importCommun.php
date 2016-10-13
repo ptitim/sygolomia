@@ -1,1 +1,2 @@
-<link href="https://fonts.googleapis.com/css?family=Amatic+SC|Archivo+Narrow|Signika" rel="stylesheet"> 
+<title>Sygolomania</title>
+<link href="https://fonts.googleapis.com/css?family=Amatic+SC|Archivo+Narrow|Signika" rel="stylesheet">

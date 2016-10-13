@@ -1,0 +1,38 @@
+$tailleCase: 18vmax;
+
+.principal{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+    width: 90vw;
+    height: 90vh;
+}
+
+.container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 50%;
+}
+
+.boutonAcces{
+  width: $tailleCase;
+  height: $tailleCase;
+  border: 0.5vmax inset rgb(45, 70, 161);
+  transition: all 0.5s ease-out;
+  background-size: contain;
+  background-repeat: no-repeat;
+  &:hover{
+    border: 0.5vmax ridge rgb(147, 45, 51);
+  }
+}
+
+#accesVideo{
+  background-image: url("../data/accesVideo.png");
+}
+
+#accesMusique{
+  background-image: url("../data/accesMusique.png");
+}

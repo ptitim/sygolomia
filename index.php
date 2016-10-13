@@ -1,3 +1,9 @@
+<?php
+  if(isset($_SESSION['flag'])){
+    session_destroy();
+  }
+?>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -13,7 +19,7 @@
     <form action="connexion.php" method="post">
       <fieldset class="form-group">
         <label for="emailInput">Email address : </label>
-        <input type="email" placeholder="Enter email" name="email" id="emailInput">
+        <input type="text" placeholder="Enter email" name="email" id="emailInput">
       </fieldset>
       <fieldset class="form-group">
         <label for="passwordInput">Password : </label>

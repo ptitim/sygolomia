@@ -1,0 +1,32 @@
+.principal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 90vw;
+  height: 90vh; }
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 50%; }
+
+.boutonAcces {
+  width: 18vmax;
+  height: 18vmax;
+  border: 0.5vmax inset #2d46a1;
+  transition: all 0.5s ease-out;
+  background-size: contain;
+  background-repeat: no-repeat; }
+  .boutonAcces:hover {
+    border: 0.5vmax ridge #932d33; }
+
+#accesVideo {
+  background-image: url("../data/accesVideo.png"); }
+
+#accesMusique {
+  background-image: url("../data/accesMusique.png"); }
+
+/*# sourceMappingURL=style.css.map */
