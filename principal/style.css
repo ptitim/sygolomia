@@ -19,7 +19,8 @@
   border: 0.5vmax inset #2d46a1;
   transition: all 0.5s ease-out;
   background-size: contain;
-  background-repeat: no-repeat; }
+  background-repeat: no-repeat;
+  background-position: center; }
   .boutonAcces:hover {
     border: 0.5vmax ridge #932d33; }
 
