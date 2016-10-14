@@ -1,12 +1,30 @@
 <?php
 session_start();
 require("../config.php");
-$req = $bdd->query('SELECT * FROM testM');
+$req = $bdd->query('SELECT titre,album,artiste,chemin FROM testM');
 
 $donneeMusique = [];
 while($donnee = $req->fetch()){
   array_push($donneeMusique, $donnee);
 }
+$transmit = fopen('donneeMusique.json','r+');
+// $tmp = "{\"DONNEMUSIQUE\":\n";
+$test = [];
+  $triage = function($value,$key){
+      if(!(preg_match_all("/\d/",$key) === 1)){
+        return $value;
+      }
+  };
+
+foreach ($donneeMusique as $key => $value) {
+  array_push($test,array_filter($value,$triage,ARRAY_FILTER_USE_BOTH));
+}
+$tmp = json_encode($test);
+
+fputs($transmit, $tmp);
+
+
+fclose($transmit);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
