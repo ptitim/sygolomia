@@ -1,10 +1,9 @@
 var data = "";
-function loadData(){
+function loadData(url){
     var xhr = new XMLHttpRequest();
-    xhr.onloadend = function(){data = JSON.parse(xhr.responseText);afficheAcceuil(); return data};
+    xhr.onloadend = function(){data = JSON.parse(xhr.responseText); return data};
     xhr.onerror = function(){console.log("Erreur requete xhtml")};
-
-    xhr.open("GET","http://localhost/sygolomia/principal/donneeMusique.json",true);
+    xhr.open("GET",url,false);
     xhr.send(null);
 }
 
@@ -27,7 +26,8 @@ function createListe(listePrincipal){
 
 function afficheMusique(){
   resetBody();
-
+  let url = "http://localhost/sygolomia/principal/donneeMusique.json";
+  loadData();
   var key, value = '';
   var liste = createDiv('liste');
   var barTri = createDiv('barTri');
@@ -46,6 +46,8 @@ function afficheMusique(){
 
 function afficheVideo(){
   resetBody();
+  let url = "http://localhost/sygolomia/principal/donneeMusique.json";
+  loadData();
 }
 
 
