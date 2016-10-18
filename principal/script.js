@@ -6,7 +6,7 @@ function loadData(url){
     xhr.open("GET",url,false);
     xhr.send(null);
 }
-
+// testestetsetsestestestes
 var body;
 var principal;
 
