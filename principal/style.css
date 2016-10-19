@@ -4,6 +4,9 @@
   box-sizing: border-box;
   text-decoration: none; }
 
+a {
+  text-decoration: none; }
+
 #principal {
   display: flex;
   flex-direction: column;
@@ -88,7 +91,8 @@
   font-size: 0.8em; }
 
 .containedItems {
-  cursor: default; }
+  cursor: default;
+  color: #c7c3c3; }
 
 .hoverThing:hover {
   transition: all 0.2s linear;

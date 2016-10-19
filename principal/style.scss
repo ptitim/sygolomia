@@ -16,6 +16,9 @@ $couleurSecondaire : rgb(179, 85, 90);
   text-decoration: none;
 }
 
+a{
+  text-decoration: none;
+}
 
 #principal{
   display: flex;
@@ -115,6 +118,7 @@ $couleurSecondaire : rgb(179, 85, 90);
 
 .containedItems{
   cursor: default;
+  color: rgb(199, 195, 195);
 }
 
 .hoverThing:hover{

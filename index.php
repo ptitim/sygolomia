@@ -1,7 +1,13 @@
 <?php
+  session_start();
+  if(isset($_SESSION['elie']) && $_SESSION['elie']){
+    $rater = true;
+    $mail = $_SESSION['mail'];
+  }
   if(isset($_SESSION['flag'])){
     session_destroy();
   }
+
 ?>
 
 <!DOCTYPE html>
@@ -16,10 +22,11 @@
   <body>
     <div class="container">
       <p id="titre">Sygolomia</p>
+      <?php if(isset($rater)) echo "<span id='rater'> Mot de passe ou identifiant incorrect </span>" ?>
     <form action="connexion.php" method="post">
       <fieldset class="form-group">
         <label for="emailInput">Email address : </label>
-        <input type="text" placeholder="Enter email" name="email" id="emailInput">
+        <input type="email" placeholder="Enter email" name="email" id="emailInput" <?php if(isset($mail)){ echo "value = ".$mail;} ?>>
       </fieldset>
       <fieldset class="form-group">
         <label for="passwordInput">Password : </label>

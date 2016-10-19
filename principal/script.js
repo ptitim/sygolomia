@@ -2,8 +2,9 @@ var data = "";
 function loadData(url){
     var xhr = new XMLHttpRequest();
     xhr.onloadend = function(){data = JSON.parse(xhr.responseText); return data};
-    xhr.onerror = function(){console.log("Erreur requete xhtml")};
+
     xhr.open("GET",url,false);
+    xhr.onerror = function(){console.log("Erreur requete xhtml")};
     xhr.send(null);
 }
 // testestetsetsestestestes
@@ -14,7 +15,6 @@ function createListe(listePrincipal){
   for (let i = 0; i < data.length; i++) {
     let ligne = createDiv('','ligne');
     for (let key in data[i]) {
-      console.log("log :", data[i][key]);
       let temp = createDiv(data[i][key],key,data[i][key]);
       ligne.appendChild(temp);
     }
@@ -23,11 +23,19 @@ function createListe(listePrincipal){
   return listePrincipal;
 }
 
+function loadMusic(){
+  let url = "http://localhost/sygolomia/principal/donneeMusique.json";
+  loadData(url);
+}
+
+function loadVideo(){
+  let url = "http://localhost/sygolomia/principal/donneeMusique.json";
+  loadData(url);
+}
+
 
 function afficheMusique(){
   resetBody();
-  let url = "http://localhost/sygolomia/principal/donneeMusique.json";
-  loadData();
   var key, value = '';
   var liste = createDiv('liste');
   var barTri = createDiv('barTri');
@@ -40,27 +48,35 @@ function afficheMusique(){
   listePrincipal = createListe(listePrincipal);
   liste.appendChild(barTri);
   liste.appendChild(listePrincipal);
+  console.log('liste: ',liste);
   return liste;
-
 }
 
 function afficheVideo(){
   resetBody();
-  let url = "http://localhost/sygolomia/principal/donneeMusique.json";
-  loadData();
 }
 
 
 function afficheListe(event){
   var element;
-  if(event.target.dataset.mode === "m" )
+  let mode = "";
+  if(typeof event == "string"){
+    mode = event;
+  }else if (typeof event == "object") {
+    mode = event.target.dataset.mode;
+  }
+  if(mode === "m"){
+    element = loadMusic();
     element = afficheMusique();
-  else if (event.target.dataset.mode == "v")
+  }
+  else if (mode === "v"){
+    element = loadVideo();
     element = afficheVideo();
-
+  }
   principal = createDiv('principal');
-  principal.appendChild(element);
   body.appendChild(principal);
+  console.log('element : ',element);
+  principal.appendChild(element);
 }
 
 
@@ -79,9 +95,10 @@ function createDiv(id,classe,texte){
     return div;
 }
 
-function init(){
+function init(mode){
    body = document.getElementsByTagName('body')[0];
-   loadData();
+   afficheListe('m');
+    // afficheAcceuil();
 }
 
 function afficheAcceuil(){
@@ -110,4 +127,9 @@ function resetBody(){
     console.log(principal);
     if(principal)
     body.removeChild(principal);
+}
+
+function afficheMusiquePlayer(){
+  var player = document.createElement('audio');
+  player.id = "audioPlayer";
 }

@@ -1,8 +1,9 @@
 <?php
 session_start();
 if(!isset($_SESSION['pseudo'])){
-  header("location:index.php");
+  header("location: http://localhost/sygolomia/index.php");
 }
+$mode = isset($_GET['mode']) AND ($_GET['mode'] === "m" OR $_GET['mode'] === "v") ? $_GET['mode'] : null; 
 ?>
 
 <!DOCTYPE html>
@@ -16,5 +17,4 @@ if(!isset($_SESSION['pseudo'])){
   <?php include("menu.php");?>
 
 </body>
-<script src="script.js" charset="utf-8"></script>
 </html>

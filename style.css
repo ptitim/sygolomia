@@ -46,6 +46,10 @@ body {
   #inscription:hover {
     color: #9d9c4f; }
 
+#rater {
+  color: #e02b2b;
+  font-family: 'Archivo Narrow', cursive; }
+
 input {
   border: none;
   border-bottom: 1px solid #2a2a2a;

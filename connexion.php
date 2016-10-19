@@ -11,13 +11,15 @@
   ));
   $donnee = $tab_mail->fetch();
 
+  session_start();
   if($donnee){
-    session_start();
     $_SESSION['pseudo'] = $donnee['pseudo'];
     $_SESSION['droit'] = $donnee['droit'];
     $_SESSION['flag'] = true;
     header("location:principal/index.php");
   }else{
+    $_SESSION['elie'] = true;
+    $_SESSION['mail'] = $p_mail;
     header("location:index.php");
   }
  ?>

@@ -41,9 +41,4 @@ function majJson(){
   fclose($transmitVid);
 };
 
-
-function import(){
-  
-}
-
  ?>
