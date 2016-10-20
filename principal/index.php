@@ -3,7 +3,7 @@ session_start();
 if(!isset($_SESSION['pseudo'])){
   header("location: http://localhost/sygolomia/index.php");
 }
-$mode = isset($_GET['mode']) AND ($_GET['mode'] === "m" OR $_GET['mode'] === "v") ? $_GET['mode'] : null; 
+$mode = isset($_GET['mode']) AND ($_GET['mode'] === "m" OR $_GET['mode'] === "v") ? $_GET['mode'] : null;
 ?>
 
 <!DOCTYPE html>

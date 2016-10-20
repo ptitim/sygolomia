@@ -31,6 +31,7 @@
       <span id="wrong">les mot de passe doivent etre identique</span>
       <br/>
       <button type="submit" id="submit" disabled="">Submit</button>
+      <a href="../index.php" id="retour">Retour connexion</a>
     </form>
     <span>le mot de passe doit contenir au moins une miniscule, une majuscule, un chiffre et un caractere special.</span>
   </div>

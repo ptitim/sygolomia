@@ -1,21 +1,32 @@
+import("playlist.js");
+
 var data = "";
 function loadData(url){
     var xhr = new XMLHttpRequest();
-    xhr.onloadend = function(){data = JSON.parse(xhr.responseText); return data};
+    xhr.onloadend = function(){data = JSON.parse(xhr.responseText);console.log(xhr.response); return data};
 
     xhr.open("GET",url,false);
     xhr.onerror = function(){console.log("Erreur requete xhtml")};
     xhr.send(null);
 }
-// testestetsetsestestestes
 var body;
 var principal;
 
 function createListe(listePrincipal){
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 1; i < data.length; i++) {
     let ligne = createDiv('','ligne');
+    ligne.draggable = 'true';
+    ligne.dataset.chemin = data[i]['chemin'];
     for (let key in data[i]) {
-      let temp = createDiv(data[i][key],key,data[i][key]);
+      if(key == "duree"){
+          var duree = secToString(data[i][key]);
+          var temp = createDiv(duree,key,duree);
+      }else if(key == "chemin") {
+          var chemin = data[i]['chemin'].replace("../../upload/","");
+          var temp = createDiv(chemin,key,chemin);
+      }else{
+        var temp = createDiv(data[i][key],key,data[i][key]);
+      }
       ligne.appendChild(temp);
     }
     listePrincipal.appendChild(ligne);
@@ -69,10 +80,10 @@ function afficheListe(event){
     element = loadMusic();
     element = afficheMusique();
   }
-  else if (mode === "v"){
-    element = loadVideo();
-    element = afficheVideo();
-  }
+  // else if (mode === "v"){
+  //   element = loadVideo();
+  //   element = afficheVideo();
+  // }
   principal = createDiv('principal');
   body.appendChild(principal);
   console.log('element : ',element);
@@ -121,7 +132,6 @@ function afficheAcceuil(){
     principal.appendChild(container);
 }
 
-
 function resetBody(){
     principal = document.getElementById('principal');
     console.log(principal);
@@ -132,4 +142,24 @@ function resetBody(){
 function afficheMusiquePlayer(){
   var player = document.createElement('audio');
   player.id = "audioPlayer";
+}
+
+function secToString(time){
+    var str = "";
+    str += Math.floor(time/60);
+    str += ":";
+    if(time%60 < 10){
+      str += "0";
+    }
+    str += time%60;
+    return str;
+}
+
+function menuPlaylist(){
+  let contain = createDiv('menuPlaylist');
+  let biblio = createDiv('biblio');
+  let containerPlaylist = createDiv('containerPlaylist');
+  let boutonCreePlaylist = document.createElement('button');
+
+
 }

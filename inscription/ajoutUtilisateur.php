@@ -6,7 +6,8 @@ $mail = $_POST['email'];
 $pass1 = $_POST['password1'];
 $pass2 = $_POST['password2'];
 
-if($pass1 !== $pass2 or strlen($pseudo) < 4){
+print_r(strlen($pseudo));
+if($pass1 !== $pass2 OR strlen($pseudo) > 4){
   header("inscription.php");
 }
 
@@ -15,10 +16,12 @@ $req->execute(array(
     'pseudo'=>$pseudo,
     'email'=>$mail
 ));
-
 $donnee = $req->fetch();
+(is_null($donnee) and print("is null<br/>")) or (!is_null($donnee) and print("is not null<br/>"));
+print_r($donnee);
+print(count($donnee));
 
-if(!is_null($donnee)){
+if(count($donnee) <= 1){
   $prep = $bdd->prepare("INSERT INTO utilisateur (pseudo,email,password,droit) VALUES (:pseudo, :email,:password, :droit)");
   $prep->execute(array(
     'pseudo'=>$pseudo,
@@ -26,9 +29,11 @@ if(!is_null($donnee)){
     'password'=>md5($pass1),
     'droit'=>0
   ));
-  header("location: http://localhost/sygolomia/index.php");
+  echo "Inscription reussi, redirection.";
+  // header("Refresh:5 ;http://localhost/sygolomia/index.php");
 }else{
-  header("inscription.php");
+  echo "Erreur L'utilisateur existe deja";
+  // header("Refresh: 5;inscription.php");
 }
 
 echo"<br/>";

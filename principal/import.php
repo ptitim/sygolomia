@@ -1,16 +1,18 @@
 <?php
-require("../config.php");
+require_once("../config.php");
+require_once("../fonctionPhp.php");
+
 require_once('../../getid3/getid3.php');
 require_once('../../getid3/getid3.lib.php');
 // import module audio
-require('../../getid3/module.audio.mp3.php');
-require('../../getid3/module.audio.ogg.php');
-// require('../../getid3/module.audio.flac.php');
-require('../../getid3/module.audio.midi.php');
-require('../../getid3/module.audio.wavpack.php');
+require_once('../../getid3/module.audio.mp3.php');
+require_once('../../getid3/module.audio.ogg.php');
+require_once('../../getid3/module.audio.flac.php');
+require_once('../../getid3/module.audio.midi.php');
+require_once('../../getid3/module.audio.wavpack.php');
 // import module video
-require('../../getid3/module.audio-video.flv.php');
-require('../../getid3/module.audio-video.mpeg.php');
+require_once('../../getid3/module.audio-video.flv.php');
+require_once('../../getid3/module.audio-video.mpeg.php');
 
 $getID3 = new getID3;
 $getID3->encoding = 'UTF-8';
@@ -29,19 +31,22 @@ if($_POST['fileType'] === "musique"){
     $fileInfo = $getID3->analyze($filetmp_name);
     $cheminTransfert = genereChemin($filetmp_name,$fileName, $type,$fileInfo);
 
-    $meta = getMeta($fileInfo,$fileName,$type);
-    $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type)');
-    $upload->execute($meta);
+    $meta = getMeta($fileInfo,$fileName,$type,$cheminTransfert);
+    $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type,chemin) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type,:chemin)');
+
     echo "chemin ".$cheminTransfert;
     $resultat = move_uploaded_file($_FILES['upload']['tmp_name'], $cheminTransfert);
+
     if($resultat){
+      $upload->execute($meta);
+      echo "<br/>";
       echo "fichier importer";
+      majJson($bdd);
     }else{
       echo "Erreur lors de l'upload";
     }
     // header("Refresh:5;URL=index.php");
-
-
+    echo "<a href='index.php'>retour</a>";
   }else
     echo $fileError;
 }
@@ -49,7 +54,7 @@ if($_POST['fileType'] === "musique"){
 
 // genere le chemin de transfert et vrée les dossier si inexistant
 function genereChemin($filetmp_dir,$fileName,$type,$fileInfo){
-  $chemin = "../upload/";
+  $chemin = "../../upload/";
 
   if(!is_dir($chemin))
     mkdir($chemin, 0777);
@@ -82,10 +87,10 @@ function genereChemin($filetmp_dir,$fileName,$type,$fileInfo){
   return $chemin;
 }
 
-function getMeta($fileInfo,$fileName,$type){
+function getMeta($fileInfo,$fileName,$type,$chemin){
       $album = isset($fileInfo['tags_html']['id3v2']['album'][0]) ? $fileInfo['tags_html']['id3v2']['album'][0] : "inconnu";
       $artist = isset($fileInfo['tags_html']['id3v2']['artist'][0]) ? $fileInfo['tags_html']['id3v2']['artist'][0] : "inconnu";
-      $duree = isset($fileInfo['playtime_seconds'][0]) ? $fileInfo['playtime_seconds'][0] : "0";
+      $duree = isset($fileInfo['playtime_seconds']) ? $fileInfo['playtime_seconds'] : "0";
       $genre = isset($fileInfo['tags_html']['id3v2']['genre'][0]) ? $fileInfo['tags_html']['id3v2']['genre'][0] : "" ;
       $titre = isset($fileInfo['tags_html']['id3v2']['title'][0]) ? $fileInfo['tags_html']['id3v2']['title'][0] : $fileName;
       return [
@@ -95,6 +100,7 @@ function getMeta($fileInfo,$fileName,$type){
               'genre' => $genre,
               'nbrdecoute' => 0,
               'duree' => $duree,
-              'type' => $type];
+              'type' => $type,
+              'chemin'=> $chemin];
 }
 ?>
