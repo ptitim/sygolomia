@@ -2,10 +2,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  text-decoration: none; }
+  text-decoration: none;
+}
 
 a {
-  text-decoration: none; }
+  text-decoration: none;
+}
 
 #principal {
   display: flex;
@@ -13,14 +15,16 @@ a {
   justify-content: center;
   align-items: center;
   width: 90vw;
-  height: 90vh; }
+  height: 90vh;
+}
 
 .container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 50%; }
+  width: 50%;
+}
 
 .boutonAcces {
   width: 18vmax;
@@ -29,55 +33,68 @@ a {
   transition: all 0.5s ease-out;
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center; }
-  .boutonAcces:hover {
-    border: 0.5vmax ridge #b3555a; }
+  background-position: center;
+}
+
+.boutonAcces:hover {
+  border: 0.5vmax ridge #b3555a;
+}
 
 #accesVideo {
-  background-image: url("../data/accesVideo.png"); }
+  background-image: url("../data/accesVideo.png");
+}
 
 #accesMusique {
-  background-image: url("../data/accesMusique.png"); }
+  background-image: url("../data/accesMusique.png");
+}
 
 #bienvenue {
   font-size: 2em;
-  font-family: 'Signika',sans-serif; }
+  font-family: 'Signika',sans-serif;
+}
 
 #listePrincipal {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 100%; }
+  width: 100%;
+}
 
 #liste {
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+}
 
 #barTri, .ligne {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between; }
+  justify-content: space-between;
+}
 
 .titre, .album, .chemin, .artiste {
   width: 20vmax;
-  overflow-x: hidden; }
+  overflow-x: hidden;
+}
 
 .navbar, .menu {
   display: flex;
   flex-direction: row;
   color: #e6dcdc;
-  background-color: #1b1b1b; }
+  background-color: #1b1b1b;
+}
 
 .navbar {
   width: 100vmax;
-  align-items: center; }
+  align-items: center;
+}
 
 .menu {
   justify-content: space-around;
   width: 100%;
   font-size: 1.5em;
-  cursor: default; }
+  cursor: default;
+}
 
 .containMenu {
   color: #c7c3c3;
@@ -88,30 +105,43 @@ a {
   flex-direction: column;
   justify-content: space-around;
   position: absolute;
-  font-size: 0.8em; }
+  font-size: 0.8em;
+}
 
 .containedItems {
   cursor: default;
-  color: #c7c3c3; }
+  color: #c7c3c3;
+}
 
 .hoverThing:hover {
   transition: all 0.2s linear;
-  color: #b3555a; }
+  color: #b3555a;
+}
 
 #menuVideo:hover > #containVideo {
   transition: all 0.4s ease-out;
-  height: 4em; }
+  height: 4em;
+}
 
 #menuMusique:hover > #containMusique {
   transition: all 0.4s ease-out;
-  height: 4em; }
+  height: 4em;
+}
 
 #deconnexion {
   color: #3b42a3;
-  text-shadow: 2px 2px #1b0707; }
-  #deconnexion:hover {
-    transition: all 0.2s linear;
-    color: #b3555a;
-    text-shadow: 2px 2px #06061c; }
+  text-shadow: 2px 2px #1b0707;
+}
 
-/*# sourceMappingURL=style.css.map */
+#deconnexion:hover {
+  transition: all 0.2s linear;
+  color: #b3555a;
+  text-shadow: 2px 2px #06061c;
+}
+
+#menuPlaylist {
+  height: 100vmin;
+  width: 15vmax;
+  display: flex;
+  flex-direction: column;
+}

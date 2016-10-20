@@ -157,9 +157,15 @@ function secToString(time){
 
 function menuPlaylist(){
   let contain = createDiv('menuPlaylist');
-  let biblio = createDiv('biblio');
+  let biblio = createDiv('biblio','','biblio');
   let containerPlaylist = createDiv('containerPlaylist');
   let boutonCreePlaylist = document.createElement('button');
+
+  boutonCreePlaylist.innerText = '+';
+  contain.appendChild(biblio);
+  contain.appendChild(containerPlaylist);
+  contain.appendChild(boutonCreePlaylist);
+
 
 
 }

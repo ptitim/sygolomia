@@ -144,3 +144,13 @@ a{
     text-shadow:  2px 2px rgb(6, 6, 28);
   }
 }
+
+
+// menu playlist
+
+#menuPlaylist{
+  height: 100vmin;
+  width: 15vmax;
+  display: flex;
+  flex-direction: column;
+}
