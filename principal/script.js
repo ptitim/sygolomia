@@ -1,5 +1,3 @@
-import("playlist.js");
-
 var data = "";
 function loadData(url){
     var xhr = new XMLHttpRequest();
@@ -139,11 +137,6 @@ function resetBody(){
     body.removeChild(principal);
 }
 
-function afficheMusiquePlayer(){
-  var player = document.createElement('audio');
-  player.id = "audioPlayer";
-}
-
 function secToString(time){
     var str = "";
     str += Math.floor(time/60);
@@ -165,7 +158,13 @@ function menuPlaylist(){
   contain.appendChild(biblio);
   contain.appendChild(containerPlaylist);
   contain.appendChild(boutonCreePlaylist);
+}
 
+class player{
+  constructor(){
+    this.player = document.createElement('audio');
+    this.player.controls = "";
+    this.container = createDiv('containerAudio');
 
-
+  }
 }
