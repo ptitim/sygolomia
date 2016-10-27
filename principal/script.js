@@ -9,6 +9,14 @@ function loadData(url){
 }
 var body;
 var principal;
+var player;
+
+function init(mode){
+   body = document.getElementsByTagName('body')[0];
+   afficheListe('m');
+   player = new Player(principal);
+    // afficheAcceuil();
+}
 
 function createListe(listePrincipal){
   for (let i = 1; i < data.length; i++) {
@@ -25,8 +33,10 @@ function createListe(listePrincipal){
       }else{
         var temp = createDiv(data[i][key],key,data[i][key]);
       }
+
       ligne.appendChild(temp);
     }
+    ligne.addEventListener('click',playThis);
     listePrincipal.appendChild(ligne);
   }
   return listePrincipal;
@@ -104,11 +114,6 @@ function createDiv(id,classe,texte){
     return div;
 }
 
-function init(mode){
-   body = document.getElementsByTagName('body')[0];
-   afficheListe('m');
-    // afficheAcceuil();
-}
 
 function afficheAcceuil(){
     resetBody();
@@ -160,11 +165,34 @@ function menuPlaylist(){
   contain.appendChild(boutonCreePlaylist);
 }
 
-class player{
-  constructor(){
+class Player{
+  constructor(div){
     this.player = document.createElement('audio');
-    this.player.controls = "";
+    this.player.controls = "controls";
     this.container = createDiv('containerAudio');
-
+    this.container.appendChild(this.player);
+    div.appendChild(this.container);
+    return this;
   }
+  setSource(source){
+    this.player.src = source;
+  }
+  getSource(){
+    return this.player.src;
+  }
+  play(){
+    this.player.play();
+  }
+  pause(){
+    this.player.pause();
+  }
+}
+
+
+function playThis(event){
+  console.log(this);
+  var source = this.dataset.chemin;
+  player.setSource(source);
+  player.play();
+  console.log("playing : ", source);
 }

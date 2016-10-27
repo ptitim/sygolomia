@@ -73,6 +73,7 @@ a{
 #liste{
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
 }
 #barTri,.ligne{
   width: 100%;
@@ -121,6 +122,13 @@ a{
   color: rgb(199, 195, 195);
 }
 
+.ligne{
+  border: 2px ridge rgba(210, 48, 48, 0.65);
+  &:hover{
+    background-color: rgba(103, 93, 181, 0.53);
+  }
+}
+
 .hoverThing:hover{
     transition: all 0.2s linear;
     color: $couleurSecondaire;
@@ -153,4 +161,8 @@ a{
   width: 15vmax;
   display: flex;
   flex-direction: column;
+}
+
+#containerAudio{
+
 }
