@@ -157,12 +157,13 @@ a{
 // menu playlist
 
 #menuPlaylist{
-  height: 100vmin;
+  height: 80vmin;
   width: 15vmax;
   display: flex;
   flex-direction: column;
 }
 
 #containerAudio{
-
+  height: 20vmin;
+  width: 80vmax;
 }

@@ -13,8 +13,8 @@ var player;
 
 function init(mode){
    body = document.getElementsByTagName('body')[0];
-   afficheListe('m');
    player = new Player(principal);
+   afficheListe('m');
     // afficheAcceuil();
 }
 
