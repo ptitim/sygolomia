@@ -39,14 +39,14 @@ if($_POST['fileType'] === "musique"){
 
     if($resultat){
       $upload->execute($meta);
+      majJson($bdd);
       echo "<br/>";
       echo "fichier importer";
-      majJson($bdd);
     }else{
       echo "Erreur lors de l'upload";
     }
     // header("Refresh:5;URL=index.php");
-    echo "<a href='index.php'>retour</a>";
+    echo "<br/><a href='index.php'>retour</a>";
   }else
     echo $fileError;
 }

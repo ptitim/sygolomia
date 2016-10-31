@@ -1,4 +1,6 @@
 <script src="script.js" charset="utf-8"></script>
+<script src="playlist.js" charset="utf-8"></script>
+
 <div class="navbar">
     <span><?php echo $_SESSION['pseudo'] ?></span>
     <div class="menu">

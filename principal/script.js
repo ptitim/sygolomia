@@ -10,10 +10,19 @@ function loadData(url){
 var body;
 var principal;
 var player;
+var playlists;
+
+var currentPlay = {
+  num : "",
+  titre : "",
+  album : "",
+  artiste : "",
+  htmlele : ""
+}
 
 function init(mode){
    body = document.getElementsByTagName('body')[0];
-   player = new Player(principal);
+   principal = document.getElementById('principal');
    afficheListe('m');
     // afficheAcceuil();
 }
@@ -24,19 +33,21 @@ function createListe(listePrincipal){
     ligne.draggable = 'true';
     ligne.dataset.chemin = data[i]['chemin'];
     for (let key in data[i]) {
-      if(key == "duree"){
-          var duree = secToString(data[i][key]);
-          var temp = createDiv(duree,key,duree);
-      }else if(key == "chemin") {
-          var chemin = data[i]['chemin'].replace("../../upload/","");
-          var temp = createDiv(chemin,key,chemin);
-      }else{
-        var temp = createDiv(data[i][key],key,data[i][key]);
-      }
+        if(key == "duree"){
+            var duree = secToString(data[i][key]);
+            var temp = createDiv(key,"musicElement",duree);
+        }else if(key == "chemin") {
+            var chemin = data[i]['chemin'].replace("../../upload/","");
+            var temp = createDiv(key,"musicElement",chemin);
+        }else{
+          // if(key != "id")
+            var temp = createDiv(data[i][key],"musicElement",data[i][key]);
+        }
 
-      ligne.appendChild(temp);
+      if(temp)
+        ligne.appendChild(temp);
     }
-    ligne.addEventListener('click',playThis);
+    ligne.addEventListener('dblclick',playThis);
     listePrincipal.appendChild(ligne);
   }
   return listePrincipal;
@@ -61,8 +72,10 @@ function afficheMusique(){
   var listePrincipal = createDiv('listePrincipal');
     //creation du menu de tri
     for(key in data[0]){
-      let temp = createDiv(key,key,key);
-      barTri.appendChild(temp);
+      if(key != "id"){
+        let temp = createDiv(key,key,key);
+        barTri.appendChild(temp);
+      }
     }
   listePrincipal = createListe(listePrincipal);
   liste.appendChild(barTri);
@@ -85,6 +98,8 @@ function afficheListe(event){
     mode = event.target.dataset.mode;
   }
   if(mode === "m"){
+    player = new Player(principal);
+    playlists = new Playlists();
     element = loadMusic();
     element = afficheMusique();
   }
@@ -93,9 +108,14 @@ function afficheListe(event){
   //   element = afficheVideo();
   // }
   principal = createDiv('principal');
+  var containerleft = createDiv('containerleft');
+  principal.appendChild(containerleft);
+  containerleft.appendChild(element);
+  player.appendPlayer(containerleft);
   body.appendChild(principal);
   console.log('element : ',element);
-  principal.appendChild(element);
+  principal.appendChild(containerleft);
+  playlists.displayContainer(principal);
 }
 
 
@@ -165,13 +185,29 @@ function menuPlaylist(){
   contain.appendChild(boutonCreePlaylist);
 }
 
+function findMus(chemin){
+  for(let i = 0; i < data.length; i++){
+    if(data[i].hasOwnProperty('chemin')){
+      if(data[i].chemin == chemin){
+        currentPlay.num = data[i].id;
+        currentPlay.titre = data[i].titre;
+        currentPlay.album = data[i].album;
+        currentPlay.artiste = data[i].artiste;
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+// object
 class Player{
   constructor(div){
     this.player = document.createElement('audio');
     this.player.controls = "controls";
+    this.player.addEventListener("ended", playnext);
     this.container = createDiv('containerAudio');
     this.container.appendChild(this.player);
-    div.appendChild(this.container);
     return this;
   }
   setSource(source){
@@ -186,13 +222,51 @@ class Player{
   pause(){
     this.player.pause();
   }
+  appendPlayer(div){
+    div.appendChild(this.container);
+  }
 }
 
 
+// event listerner function
 function playThis(event){
   console.log(this);
+  var reset = document.getElementsByClassName('playing');
+  if(reset != [] && reset != undefined);
+  for (var i = 0; i < reset.length; i++) {
+    reset[i].className = "ligne";
+  }
+  this.className += " playing";
   var source = this.dataset.chemin;
+  if(!findMus(source)){
+    console.log("Error : track not found, source : ",source);
+  }
+  currentPlay.htmlele = event.target;
   player.setSource(source);
   player.play();
   console.log("playing : ", source);
+}
+
+function playnext(event){
+  console.log(event);
+  var next = currentPlay.htmlele.nextElementSibling;
+  console.log("next = ", next);
+  if(next){
+    var source = next.dataset.chemin;
+    player.setSource(source);
+    player.play();
+    console.log("playing : ", source);
+    if(!findMus(source)){
+      console.log("Error : track not found, source : ",source);
+    }
+    currentPlay.htmlele = currentPlay.htmlele.nextElementSibling;
+    var reset = document.getElementsByClassName('playing');
+    if(reset != [] && reset != undefined);
+    for (var i = 0; i < reset.length; i++) {
+      reset[i].className = "ligne";
+    }
+    next.className += " playing";
+  }
+
+
 }

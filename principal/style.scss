@@ -1,13 +1,12 @@
 $tailleCase: 18vmax;
 $couleurPrincipal : rgb(56, 65, 96);
-$couleurSecondaire : rgb(179, 85, 90);
+$couleurSecondaire : #b3555a;
 
 
 @mixin listeMus {
-  width : 20vmax;
+  width : 15vmax;
   overflow-x: hidden;
 }
-
 
 *{
   margin: 0;
@@ -22,14 +21,16 @@ a{
 
 #principal{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
-  align-items: center;
-    width: 90vw;
-    height: 90vh;
+  // align-items: center;
+  // flex-wrap: wrap;
+  width: 90vw;
+  height: 90vh;
 }
 
 .container{
+  order: 1;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -65,23 +66,30 @@ a{
 
 
 #listePrincipal{
+  order: 3;
+  margin-top: 5vmin;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
 }
 #liste{
+  order: 2;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
-}
-#barTri,.ligne{
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  overflow-y: hidden;
 }
 
+#barTri{
+  position: absolute;
+  max-width: 70vmax;
+}
+#barTri,.ligne{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 .titre,.album,.chemin,.artiste{
   @include listeMus();
 }
@@ -123,10 +131,17 @@ a{
 }
 
 .ligne{
+  transition: all 0.5s ease-in-out;
   border: 2px ridge rgba(210, 48, 48, 0.65);
   &:hover{
     background-color: rgba(103, 93, 181, 0.53);
   }
+}
+.playing{
+  background-color: #82B7B4;
+}
+.musicElement{
+  overflow: hidden;
 }
 
 .hoverThing:hover{
@@ -153,17 +168,29 @@ a{
   }
 }
 
+#containerleft{
+  order: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100vmin;
+  width: 80vmax;
+  right: 0;
+}
 
 // menu playlist
 
-#menuPlaylist{
-  height: 80vmin;
-  width: 15vmax;
+#playlistContainer{
+  order: 1;
+  height: 100vmin;
+  width: 20vmax;
   display: flex;
   flex-direction: column;
+  overflow: scroll;
 }
 
+// lecteur
 #containerAudio{
-  height: 20vmin;
+  order: 1;
+  height: 15vmin;
   width: 80vmax;
 }

@@ -15,6 +15,8 @@ $mode = isset($_GET['mode']) AND ($_GET['mode'] === "m" OR $_GET['mode'] === "v"
   </head>
   <body onload="init()">
   <?php include("menu.php");?>
-
+  <div id="principal">
+    
+  </div>
 </body>
 </html>
