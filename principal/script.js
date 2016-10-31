@@ -241,7 +241,7 @@ function playThis(event){
   if(!findMus(source)){
     console.log("Error : track not found, source : ",source);
   }
-  currentPlay.htmlele = event.target;
+  currentPlay.htmlele = this;
   player.setSource(source);
   player.play();
   console.log("playing : ", source);
