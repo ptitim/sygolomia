@@ -1,11 +1,12 @@
 $tailleCase: 18vmax;
-$couleurPrincipal : rgb(56, 65, 96);
+$couleurPrincipal : rgb(58, 77, 144);
 $couleurSecondaire : #b3555a;
 
 
 @mixin listeMus {
-  width : 15vmax;
-  overflow-x: hidden;
+  min-width : 20vmax;
+  max-width: 20vmax;
+  text-align: left;
 }
 
 *{
@@ -26,7 +27,7 @@ a{
   // align-items: center;
   // flex-wrap: wrap;
   width: 100vmax;
-  height: 90vh;
+  height: 95vh;
 }
 
 .container{
@@ -67,11 +68,8 @@ a{
 
 #listePrincipal{
   order: 3;
-  margin-top: 5vmin;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   width: 100%;
+  overflow-y: scroll;
 }
 #liste{
   order: 2;
@@ -82,18 +80,24 @@ a{
 
 #barTri{
   position: absolute;
+  text-align: left;
   max-width: 70vmax;
 }
-#barTri,.ligne{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-.titre,.album,.chemin,.artiste{
+
+// #barTri,.ligne{
+//     width: 100%;
+//     display: flex;
+//     flex-direction: row;
+//     justify-content: space-between;
+//   }
+
+.bartri{
   @include listeMus();
 }
-
+.duree{
+  min-width: 5vmax;
+  max-width: 5vmax;
+}
 // navbar
 
 .navbar,.menu{
@@ -131,6 +135,9 @@ a{
 }
 
 .ligne{
+  font-size: 0.9em;
+  text-align: center;
+  display: flex;
   transition: all 0.2s ease-in-out;
   border: 2px ridge rgba(210, 48, 48, 0.65);
   &:hover{
@@ -140,11 +147,6 @@ a{
 .playing{
   background-color: #82B7B4;
 }
-.musicElement{
-  overflow: hidden;
-  max-width: 15vmax;
-}
-
 .hoverThing:hover{
     transition: all 0.2s linear;
     color: $couleurSecondaire;
@@ -173,8 +175,8 @@ a{
   order: 2;
   display: flex;
   flex-direction: column;
-  height: 100vmin;
-  width: 80vmax;
+  height: 100%;
+  width: 89vmax;
   right: 0;
 }
 
@@ -182,16 +184,58 @@ a{
 
 #playlistContainer{
   order: 1;
-  height: 100vmin;
-  width: 20vmax;
+  height: 100%;
+  width: 10vmax;
   display: flex;
   flex-direction: column;
   overflow: scroll;
 }
 
 // lecteur
-#containerAudio{
-  order: 1;
-  height: 15vmin;
-  width: 80vmax;
-}
+  #containerAudio{
+    order: 1;
+    height: 15vmin;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  // control player
+    #player{
+      order: 1;
+      width: 100%;
+    }
+    .audioButton{
+      text-align: center;
+      justify-content: center;
+      transition: all 0.3s ease-out;
+      background-color: #dedede;
+      border-radius: 25%;
+      width: 15vmax;
+      &:hover{
+        background-color: rgba(24, 47, 131, 0.72);
+        color: white;
+      }
+    }
+    #next{
+      order: 3;
+    }
+    #previous{
+      order: 2;
+    }
+  // afficheur
+    #afficheur{
+      order: 5;
+      width: 100%;
+    }
+
+
+// playlist maker
+  #playtlistMaker{
+    background-color: rgb(107, 107, 107);
+    position: absolute;
+    left: 20vmax;
+    top: 20vmax;
+    
+  }

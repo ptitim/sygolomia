@@ -1,11 +1,14 @@
 class Playlists{
   constructor(){
     this.container = this.containerPlaylist();
-    this.tabPlaylist = [];
+    this.buttonAddPlaylist = createDiv('addPlaylist','playlistButton','add');
+    this.buttonAddPlaylist.addEventListener('click',this.createPlaylist.bind(this));
+    this.container.appendChild(this.buttonAddPlaylist);
+    this.tabPlaylists = [];
     this.playlistCounter = 0;
   }
   containerPlaylist(){
-    var div = createDiv('playlistContainer','','Je suis le container playlist');
+    var div = createDiv('playlistContainer');
     return div;
   }
   displayContainer(ele){
@@ -15,20 +18,70 @@ class Playlists{
   //   this.playlistCounter++;
   //   this.tabPlaylist.push({"name" : playlist});
   // }
-  createPlaylist(name){
+  createPlaylist(){
+    console.log("make your playlist");
+    this.afgFormulaire();
     this.playlistCounter++;
-    this.tabPlaylist.push(new Playlist(name, this));
   }
   getPlaylists(){
-    return this.tabPlaylist;
+    return this.tabPlaylists;
+  }
+  afgFormulaire(){
+    this.divPrinc = createDiv('playtlistMaker');
+    this.inputName = document.createElement('input');
+    this.inputName.id = "inputName";
+    this.inputName.type = "text";
+    this.inputName.name = "name";
+    this.buttonOk = document.createElement('button');
+    this.buttonOk.innerText = "create";
+    this.buttonOk.addEventListener('click',this.submit.bind(this));
+
+    this.divPrinc.appendChild(this.inputName);
+    this.divPrinc.appendChild(this.buttonOk);
+
+    document.body.appendChild(this.divPrinc);
+  }
+  submit(){
+      let input = document.getElementById('inputName');
+      let name = input.value;
+      let tmp = new Playlist(name,this.playlistCounter);
+      this.tabPlaylists.push(tmp);
+      document.body.removeChild(input.parentElement);
+      this.container.appendChild(tmp.htmlele);
   }
 }
 
+
+function  afgFormulaire(){
+    divPrinc = createDiv('playtlistMaker');
+    inputName = document.createElement('input');
+    inputName.id = "inputName";
+    inputName.type = "text";
+    inputName.name = "name";
+    buttonOk = document.createElement('button');
+    buttonOk.innerText = "create";
+    buttonOk.addEventListener('click',playlists.submit);
+
+    divPrinc.appendChild(this.inputName);
+    divPrinc.appendChild(this.buttonOk);
+
+    document.body.appendChild(this.divPrinc);
+  }
+
+function submit(playlists){
+      let input = document.getElementById('inputName');
+      let name = input.value;
+      playlists.tabPlaylist.push(new Playlist(name,this.playlistCounter));
+  }
+
 class Playlist{
-  constructor(nom,obj){
+  constructor(nom,id){
     this.nom = nom;
     this.tabMus = [];
-    this.htmlele = this.createHtmlEle(obj);
+    this.htmlele = document.createElement('p');
+    this.htmlele.id = nom;
+    this.htmlele.className = "playlist";
+    this.htmlele.innerText = nom;
   }
   createHtmlEle(playlists){
     let span = document.createElement('span');

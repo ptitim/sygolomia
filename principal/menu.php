@@ -19,7 +19,8 @@
           <div class="containMenu" id="containMusique">
               <!-- <span id="accesMusique" class="hoverThing containedItems" onclick="afficheListe(event={target:this})" data-mode="m">acces Musique</span> -->
               <a href="importMusique.php"><span id="importMusique" class="hoverThing containedItems">envoyer une musique</span></a>
-              <span id="importsMusique" class="hoverThing containedItems">envoyer des musiques</span>
+              <a href="importsmusiques.php"><span id="importsMusique" class="hoverThing containedItems">envoyer des musiques</span></a>
+              <a href="import.php?maj=true"><span class="hoverThing containedItems">mettre a jour</span></a>
           </div>
         </div>
         <a href="deconexion.php" class="hoverThing" id="deconnexion">deconnexion</a>

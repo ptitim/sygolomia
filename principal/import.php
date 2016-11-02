@@ -14,6 +14,11 @@ require_once('../../getid3/module.audio.wavpack.php');
 require_once('../../getid3/module.audio-video.flv.php');
 require_once('../../getid3/module.audio-video.mpeg.php');
 
+if(isset($_GET['maj']) AND $_GET['maj'] === true){
+    majJson($bdd);
+    header("location: index.php");
+}
+
 $getID3 = new getID3;
 $getID3->encoding = 'UTF-8';
 
@@ -49,6 +54,39 @@ if($_POST['fileType'] === "musique"){
     echo "<br/><a href='index.php'>retour</a>";
   }else
     echo $fileError;
+}
+
+if($_POST['fileType'] == "musiques"){
+  if($_POST['type'] == "artiste" OR $_POST['type'] == "ost" OR $_POST['type'] == "autres"){
+    $type = $_POST['type'];
+    foreach ($_FILES['uploads']['tmp_name'] as $key => $value) {
+      $fileName = $_FILES['uploads']['name'][$key];
+      $filetmp_name = $value;
+      $fileInfo = $getID3->analyze($filetmp_name);
+
+      $cheminTransfert = genereChemin($filetmp_name,$fileName, $type,$fileInfo);
+      echo $cheminTransfert."<br/>";
+
+      $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type,chemin) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type,:chemin)');
+      $resultat = move_uploaded_file($filetmp_name, $cheminTransfert);
+
+      $meta = getMeta($fileInfo,$fileName,$type,$cheminTransfert);
+
+      if($resultat){
+        $upload->execute($meta);
+        echo "<br/>";
+        echo "fichier importer";
+      }else{
+        echo "Erreur lors de l'upload";
+      }
+      majJson($bdd);
+    }
+
+  }else {
+    echo "Type incorect";
+    echo "<br/>";
+  }
+  echo "<br/><a href='index.php'>retour</a>";
 }
 
 

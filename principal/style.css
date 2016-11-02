@@ -12,7 +12,7 @@ a {
   flex-direction: row;
   justify-content: center;
   width: 100vmax;
-  height: 90vh; }
+  height: 95vh; }
 
 .container {
   order: 1;
@@ -25,7 +25,7 @@ a {
 .boutonAcces {
   width: 18vmax;
   height: 18vmax;
-  border: 0.5vmax inset #384160;
+  border: 0.5vmax inset #3a4d90;
   transition: all 0.5s ease-out;
   background-size: contain;
   background-repeat: no-repeat;
@@ -45,11 +45,8 @@ a {
 
 #listePrincipal {
   order: 3;
-  margin-top: 5vmin;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%; }
+  width: 100%;
+  overflow-y: scroll; }
 
 #liste {
   order: 2;
@@ -59,17 +56,17 @@ a {
 
 #barTri {
   position: absolute;
+  text-align: left;
   max-width: 70vmax; }
 
-#barTri, .ligne {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between; }
+.bartri {
+  min-width: 20vmax;
+  max-width: 20vmax;
+  text-align: left; }
 
-.titre, .album, .chemin, .artiste {
-  width: 15vmax;
-  overflow-x: hidden; }
+.duree {
+  min-width: 5vmax;
+  max-width: 5vmax; }
 
 .navbar, .menu {
   display: flex;
@@ -89,7 +86,7 @@ a {
 
 .containMenu {
   color: #c7c3c3;
-  background-color: #384160;
+  background-color: #3a4d90;
   height: 0;
   overflow: hidden;
   display: flex;
@@ -103,6 +100,9 @@ a {
   color: #c7c3c3; }
 
 .ligne {
+  font-size: 0.9em;
+  text-align: center;
+  display: flex;
   transition: all 0.2s ease-in-out;
   border: 2px ridge rgba(210, 48, 48, 0.65); }
   .ligne:hover {
@@ -110,10 +110,6 @@ a {
 
 .playing {
   background-color: #82B7B4; }
-
-.musicElement {
-  overflow: hidden;
-  max-width: 15vmax; }
 
 .hoverThing:hover {
   transition: all 0.2s linear;
@@ -139,14 +135,14 @@ a {
   order: 2;
   display: flex;
   flex-direction: column;
-  height: 100vmin;
-  width: 80vmax;
+  height: 100%;
+  width: 89vmax;
   right: 0; }
 
 #playlistContainer {
   order: 1;
-  height: 100vmin;
-  width: 20vmax;
+  height: 100%;
+  width: 10vmax;
   display: flex;
   flex-direction: column;
   overflow: scroll; }
@@ -154,6 +150,41 @@ a {
 #containerAudio {
   order: 1;
   height: 15vmin;
-  width: 80vmax; }
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap; }
+
+#player {
+  order: 1;
+  width: 100%; }
+
+.audioButton {
+  text-align: center;
+  justify-content: center;
+  transition: all 0.3s ease-out;
+  background-color: #dedede;
+  border-radius: 25%;
+  width: 15vmax; }
+  .audioButton:hover {
+    background-color: rgba(24, 47, 131, 0.72);
+    color: white; }
+
+#next {
+  order: 3; }
+
+#previous {
+  order: 2; }
+
+#afficheur {
+  order: 5;
+  width: 100%; }
+
+#playtlistMaker {
+  background-color: #6b6b6b;
+  position: absolute;
+  left: 20vmax;
+  top: 20vmax; }
 
 /*# sourceMappingURL=style.css.map */
