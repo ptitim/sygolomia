@@ -2,7 +2,8 @@
 <script src="playlist.js" charset="utf-8"></script>
 
 <div class="navbar">
-    <span><?php echo $_SESSION['pseudo'] ?></span>
+    <span><?php echo $_SESSION['pseudo']." ";
+                var_dump($_SESSION['id'])?></span>
     <div class="menu">
       <a href="index.php"><span id="acceuil" class="hoverThing containedItems" onclick="afficheAcceuil()">Acceuil</span></a>
       <!-- <div id="menuVideo" class="hoverThing">

@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once("../config.php");
 require_once("../fonctionPhp.php");
 
@@ -22,7 +23,7 @@ if(isset($_GET['maj']) AND $_GET['maj'] === true){
 $getID3 = new getID3;
 $getID3->encoding = 'UTF-8';
 
-if($_POST['fileType'] === "musique"){
+if(isset($_POST['fileType']) && $_POST['fileType'] === "musique"){
 // file
   $fileError = $_FILES['upload']['error'];
   if($fileError === 0){
@@ -56,7 +57,7 @@ if($_POST['fileType'] === "musique"){
     echo $fileError;
 }
 
-if($_POST['fileType'] == "musiques"){
+if(isset($_POST['fileType']) && $_POST['fileType'] == "musiques"){
   if($_POST['type'] == "artiste" OR $_POST['type'] == "ost" OR $_POST['type'] == "autres"){
     $type = $_POST['type'];
     foreach ($_FILES['uploads']['tmp_name'] as $key => $value) {
@@ -140,5 +141,38 @@ function getMeta($fileInfo,$fileName,$type,$chemin){
               'duree' => $duree,
               'type' => $type,
               'chemin'=> $chemin];
+}
+
+if(isset($_GET['playlist']) && $_GET['playlist'] === "true"){
+    $tmp = file_get_contents('php://input');
+    $tmp = json_decode($tmp);
+    $tab = $tmp->tabPlaylists;
+
+    $index = count($tab)-1;
+    $nom = $tab[$index]->nom;
+    $id = $tab[$index]->idPlaylist;
+
+    $insert = $bdd->prepare("INSERT INTO playlist (nom, idUtilisateur) VALUES (:nom,:idUtilisateur)");
+    $insert->bindParam('nom',$nom,PDO::PARAM_STR);
+    $insert->bindParam('idUtilisateur',$_SESSION['id'],PDO::PARAM_INT);
+    $insert->execute();
+
+    $allPlaylist = $bdd->query('SELECT * FROM playlist');
+    $tab = [];
+    $tmp = [];
+    while($donnee = $allPlaylist->fetch()){
+      array_push($tmp,$donnee);
+    };
+      $triage = function($value,$key){
+          if(!(preg_match_all("/\d/",$key) === 1)){
+            return $value;
+          }
+      };
+    // tri des clé inutile des query SQL, retounant les valeur en double
+    foreach ($tmp as $key => $value) {
+      array_push($tab,array_filter($value,$triage,ARRAY_FILTER_USE_BOTH));
+    }
+    file_put_contents("playlist.json",json_encode($tab));
+    // header('location: index.php?name='.$name);
 }
 ?>

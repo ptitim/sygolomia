@@ -84,13 +84,6 @@ a{
   max-width: 70vmax;
 }
 
-// #barTri,.ligne{
-//     width: 100%;
-//     display: flex;
-//     flex-direction: row;
-//     justify-content: space-between;
-//   }
-
 .bartri{
   @include listeMus();
 }
@@ -118,6 +111,7 @@ a{
 }
 
 .containMenu{
+  z-index: 2;
   color: rgb(199, 195, 195);
   background-color: $couleurPrincipal;
   height: 0;
@@ -193,8 +187,9 @@ a{
 
 // lecteur
   #containerAudio{
+    z-index: 1;
     order: 1;
-    height: 15vmin;
+    min-height: 15vmin;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -213,6 +208,7 @@ a{
       background-color: #dedede;
       border-radius: 25%;
       width: 15vmax;
+      max-height: 3vmin;
       &:hover{
         background-color: rgba(24, 47, 131, 0.72);
         color: white;
@@ -233,9 +229,13 @@ a{
 
 // playlist maker
   #playtlistMaker{
-    background-color: rgb(107, 107, 107);
+    background-color: rgba(107, 107, 107, 0.53);
     position: absolute;
-    left: 20vmax;
-    top: 20vmax;
-    
+    top: 0;
+    left: 0;
+    height: 100vmin;
+    width: 100vmax;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }

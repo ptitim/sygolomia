@@ -14,10 +14,6 @@ class Playlists{
   displayContainer(ele){
     ele.appendChild(this.container);
   }
-  // addPlaylist(playlist,name){
-  //   this.playlistCounter++;
-  //   this.tabPlaylist.push({"name" : playlist});
-  // }
   createPlaylist(){
     console.log("make your playlist");
     this.afgFormulaire();
@@ -36,10 +32,15 @@ class Playlists{
     this.buttonOk.innerText = "create";
     this.buttonOk.addEventListener('click',this.submit.bind(this));
 
+    this.buttonCancel = document.createElement('button');
+    this.buttonCancel.innerText = "cancel";
+    this.buttonCancel.addEventListener('click',this.cancel.bind(this));
     this.divPrinc.appendChild(this.inputName);
     this.divPrinc.appendChild(this.buttonOk);
+    this.divPrinc.appendChild(this.buttonCancel);
 
     document.body.appendChild(this.divPrinc);
+    this.inputName.autofocus = "autofocus";
   }
   submit(){
       let input = document.getElementById('inputName');
@@ -48,35 +49,24 @@ class Playlists{
       this.tabPlaylists.push(tmp);
       document.body.removeChild(input.parentElement);
       this.container.appendChild(tmp.htmlele);
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST','import.php?playlist=true');
+      let dataplaylist = JSON.stringify(this);
+      console.log("data : "+data);
+      xhr.onloadend = function(){
+        console.log("response : "+ xhr.responseText);
+      }
+      xhr.send(dataplaylist);
+  }
+  cancel(){
+    document.body.removeChild(this.inputName.parentElement);
   }
 }
-
-
-function  afgFormulaire(){
-    divPrinc = createDiv('playtlistMaker');
-    inputName = document.createElement('input');
-    inputName.id = "inputName";
-    inputName.type = "text";
-    inputName.name = "name";
-    buttonOk = document.createElement('button');
-    buttonOk.innerText = "create";
-    buttonOk.addEventListener('click',playlists.submit);
-
-    divPrinc.appendChild(this.inputName);
-    divPrinc.appendChild(this.buttonOk);
-
-    document.body.appendChild(this.divPrinc);
-  }
-
-function submit(playlists){
-      let input = document.getElementById('inputName');
-      let name = input.value;
-      playlists.tabPlaylist.push(new Playlist(name,this.playlistCounter));
-  }
 
 class Playlist{
   constructor(nom,id){
     this.nom = nom;
+    this.idPlaylist = id;
     this.tabMus = [];
     this.htmlele = document.createElement('p');
     this.htmlele.id = nom;

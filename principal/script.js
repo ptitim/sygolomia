@@ -1,12 +1,25 @@
 var data = "";
+var playlistData = "";
 function loadData(url){
     var xhr = new XMLHttpRequest();
-    xhr.onloadend = function(){data = JSON.parse(xhr.responseText);console.log(xhr.response); return data};
-
+    xhr.onloadend = function(){data = JSON.parse(xhr.responseText); return data};
     xhr.open("GET",url,false);
     xhr.onerror = function(){console.log("Erreur requete xhtml")};
     xhr.send(null);
 }
+function loadPlaylist(url){
+  var requete = new XMLHttpRequest();
+  requete.onloadend = function(){
+    playlistData = JSON.parse(requete.responseText);
+    console.log(requete.responseText);
+    affichePlaylist();
+    return playlistData;
+  };
+  requete.open('GET',url,true);
+  requete.onerror = function(){console.log("Erreur chargment playlist")};
+  requete.send(null);
+}
+
 var body;
 var principal;
 var player;
@@ -25,6 +38,7 @@ function init(mode){
    principal = document.getElementById('principal');
    window.addEventListener('keypress',changeSongKeybord);
    afficheListe('m');
+   loadPlaylist("http://localhost/sygolomia/principal/playlist.json");
     // afficheAcceuil();
 }
 
@@ -78,6 +92,12 @@ function loadMusic(){
 function loadVideo(){
   let url = "http://localhost/sygolomia/principal/donneeMusique.json";
   loadData(url);
+}
+
+function affichePlaylist(){
+  for(let i = 0; i < playlistData.length; i++){
+    // TODO: finir la boucle d'affichage des playlist
+  }
 }
 
 
@@ -198,17 +218,7 @@ function secToString(time){
     return str;
 }
 
-function menuPlaylist(){
-  let contain = createDiv('menuPlaylist');
-  let biblio = createDiv('biblio','','biblio');
-  let containerPlaylist = createDiv('containerPlaylist');
-  let boutonCreePlaylist = document.createElement('button');
 
-  boutonCreePlaylist.innerText = '+';
-  contain.appendChild(biblio);
-  contain.appendChild(containerPlaylist);
-  contain.appendChild(boutonCreePlaylist);
-}
 
 function findMus(chemin){
   for(let i = 0; i < data.length; i++){
@@ -224,6 +234,7 @@ function findMus(chemin){
   }
   return false;
 }
+
 
 // object
 class Player{

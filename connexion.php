@@ -1,6 +1,6 @@
 <?php
   require("config.php");
-
+  if(isset($_POST['email']) && isset($_POST['password'])){
   $p_mail = $_POST['email'];
   $p_pass = $_POST['password'];
 
@@ -13,6 +13,7 @@
 
   session_start();
   if($donnee){
+    $_SESSION['id'] = intval($donnee['id']);
     $_SESSION['pseudo'] = $donnee['pseudo'];
     $_SESSION['droit'] = $donnee['droit'];
     $_SESSION['flag'] = true;
@@ -22,4 +23,7 @@
     $_SESSION['mail'] = $p_mail;
     header("location:index.php");
   }
+}else {
+  header("location:index.php?erreur=true");
+}
  ?>

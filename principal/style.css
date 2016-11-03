@@ -85,6 +85,7 @@ a {
   cursor: default; }
 
 .containMenu {
+  z-index: 2;
   color: #c7c3c3;
   background-color: #3a4d90;
   height: 0;
@@ -148,8 +149,9 @@ a {
   overflow: scroll; }
 
 #containerAudio {
+  z-index: 1;
   order: 1;
-  height: 15vmin;
+  min-height: 15vmin;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -166,7 +168,8 @@ a {
   transition: all 0.3s ease-out;
   background-color: #dedede;
   border-radius: 25%;
-  width: 15vmax; }
+  width: 15vmax;
+  max-height: 3vmin; }
   .audioButton:hover {
     background-color: rgba(24, 47, 131, 0.72);
     color: white; }
@@ -182,9 +185,14 @@ a {
   width: 100%; }
 
 #playtlistMaker {
-  background-color: #6b6b6b;
+  background-color: rgba(107, 107, 107, 0.53);
   position: absolute;
-  left: 20vmax;
-  top: 20vmax; }
+  top: 0;
+  left: 0;
+  height: 100vmin;
+  width: 100vmax;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
 
 /*# sourceMappingURL=style.css.map */

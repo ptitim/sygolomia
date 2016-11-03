@@ -11,6 +11,9 @@
   <body>
     <div class="container">
       Inscription
+      <?php if(isset($_GET['erreur']) && $_GET['erreur'] === true){
+        echo "<p id='erreur'>Il y a une erreur lors de l'inscription, veilliez réésayer";
+      }?>
     <form method="post" action="ajoutUtilisateur.php">
       <fieldset class="form-group">
           <label for="pseudoInput">Pseudonyme</label>
