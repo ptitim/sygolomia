@@ -15,7 +15,7 @@ if($pass1 !== $pass2 OR strlen($pseudo) > 4 OR preg_match('/(.{4,})(=?@.+)(\..+)
 }else{
   echo "mail : " .$mail;
   echo " ";
-  var_dump(preg_match('/(.{4,})(=?@.+)(\..+)/',$mail) != 1);
+  // var_dump(preg_match('/(.{4,})(=?@.+)(\..+)/',$mail) != 1);
 
 
   $req = $bdd->prepare('SELECT pseudo,email FROM utilisateur WHERE pseudo=:pseudo OR email=:email');

@@ -7,17 +7,19 @@ function loadData(url){
     xhr.onerror = function(){console.log("Erreur requete xhtml")};
     xhr.send(null);
 }
+
 function loadPlaylist(url){
   var requete = new XMLHttpRequest();
+  requete.open('POST',url,true);
+  requete.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+  requete.send("playlists=true");
   requete.onloadend = function(){
     playlistData = JSON.parse(requete.responseText);
-    console.log(requete.responseText);
+    console.log("requete playlists : "+requete.responseText);
     affichePlaylist();
     return playlistData;
   };
-  requete.open('GET',url,true);
   requete.onerror = function(){console.log("Erreur chargment playlist")};
-  requete.send(null);
 }
 
 var body;
@@ -38,7 +40,7 @@ function init(mode){
    principal = document.getElementById('principal');
    window.addEventListener('keypress',changeSongKeybord);
    afficheListe('m');
-   loadPlaylist("http://localhost/sygolomia/principal/playlist.json");
+   loadPlaylist("http://localhost/sygolomia/principal/createJson.php");
     // afficheAcceuil();
 }
 
@@ -95,8 +97,12 @@ function loadVideo(){
 }
 
 function affichePlaylist(){
+  let index = 0;
   for(let i = 0; i < playlistData.length; i++){
-    // TODO: finir la boucle d'affichage des playlist
+    let temp = new Playlist(playlistData[i].nom, playlistData[i].id);
+    playlists.tabPlaylists.push(temp);
+    temp.createHtmlEle(playlists);
+    index = i;
   }
 }
 
@@ -233,6 +239,16 @@ function findMus(chemin){
     }
   }
   return false;
+}
+
+function getTrack(chemin){
+  for(let i = 0; i < data.length; i++){
+    if(data[i].hasOwnProperty('chemin')){
+      if(data[i].chemin == chemin){
+        return data[i];
+      }
+    }
+  }
 }
 
 

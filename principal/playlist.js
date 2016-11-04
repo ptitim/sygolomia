@@ -70,17 +70,19 @@ class Playlist{
     this.tabMus = [];
     this.htmlele = document.createElement('p');
     this.htmlele.id = nom;
+    this.htmlele.dataset.idPlaylist = id;
     this.htmlele.className = "playlist";
     this.htmlele.innerText = nom;
+    // this.createHtmlEle();
   }
   createHtmlEle(playlists){
-    let span = document.createElement('span');
-    span.id = this.nom;
-    span.innerText = this.nom;
-    span.className = "playlists";
+    // let span = document.createElement('span');
+    // span.id = this.nom;
+    // span.innerText = this.nom;
+    // span.className = "playlists";
     // playlists.addPlaylist(this);
-    playlists.container.appendChild(span);
-    return span;
+    playlists.container.appendChild(this.htmlele);
+    // return span;
   }
 
 }
