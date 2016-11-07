@@ -10,7 +10,7 @@ function majJson($bdd){
     array_push($donneeMusique, $donnee);
   }
 
-  $transmitMus = fopen('donneeMusique.json','r+');
+  $transmitMus = fopen('donneeMusique.json','w');
   $triMusique = [];
     $triage = function($value,$key){
         if(!(preg_match_all("/\d/",$key) === 1)){
@@ -26,6 +26,7 @@ function majJson($bdd){
   $tmp = json_encode($triMusique);
   $error = fputs($transmitMus, $tmp);
   fclose($transmitMus);
+  echo "mise a jour terminer";
 };
 
  ?>

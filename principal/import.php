@@ -15,9 +15,13 @@ require_once('../../getid3/module.audio.wavpack.php');
 require_once('../../getid3/module.audio-video.flv.php');
 require_once('../../getid3/module.audio-video.mpeg.php');
 
-if(isset($_GET['maj']) AND $_GET['maj'] === true){
+var_dump($_GET);
+if(isset($_GET['maj']) AND $_GET['maj'] === "true"){
+    echo "appel";
     majJson($bdd);
-    header("location: index.php");
+    // header("location: index.php");
+    echo "<br/>";
+    echo "<a href='index.php>retour musiques</a>'";
 }
 
 $getID3 = new getID3;
