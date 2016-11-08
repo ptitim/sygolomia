@@ -17,6 +17,7 @@ function loadPlaylist(url){
     playlistData = JSON.parse(requete.responseText);
     console.log("requete playlists : "+requete.responseText);
     affichePlaylist();
+    ct.setContainerPlaylist(playlists.tabPlaylists);
     return playlistData;
   };
   requete.onerror = function(){console.log("Erreur chargment playlist")};
@@ -26,6 +27,7 @@ var body;
 var principal;
 var player;
 var playlists;
+var ct;
 
 var currentPlay = {
   num : "",
@@ -41,6 +43,8 @@ function init(mode){
    window.addEventListener('keypress',changeSongKeybord);
    afficheListe('m');
    loadPlaylist("http://localhost/sygolomia/principal/createJson.php");
+   ct = new ContextMenuMusique();
+   window.addEventListener('click',link);
     // afficheAcceuil();
 }
 
@@ -52,6 +56,7 @@ function createListe(listePrincipal){
 
     ligne.draggable = 'true';
     ligne.dataset.chemin = data[i]['chemin'];
+    ligne.dataset.idTrack = data[i]['id'];
     for (let key in data[i]) {
         if(key == "duree"){
             var duree = secToString(data[i][key]);
@@ -81,6 +86,7 @@ function createListe(listePrincipal){
       //   ligne.appendChild(temp);
     }
     ligne.addEventListener('dblclick',playThis);
+    ligne.addEventListener('contextmenu',diplayContextMenuTrack);
     listePrincipal.appendChild(ligne);
   }
   return listePrincipal;
@@ -99,7 +105,7 @@ function loadVideo(){
 function affichePlaylist(){
   let index = 0;
   for(let i = 0; i < playlistData.length; i++){
-    let temp = new Playlist(playlistData[i].nom, playlistData[i].id);
+    let temp = new Playlist(playlistData[i].nom, playlistData[i].idPlaylist);
     playlists.tabPlaylists.push(temp);
     temp.createHtmlEle(playlists);
     index = i;
@@ -253,6 +259,7 @@ function getTrack(chemin){
 
 
 // object
+//
 class Player{
   constructor(div){
     // controleur audio
@@ -329,10 +336,63 @@ class Player{
   }
 }
 
+class ContextMenuMusique{
+  constructor(){
+    this.container = createDiv('containerCT','contextMenu');
+    this.container.style.position = "absolute";
+    this.container.style.display = "none";
+    this.play = createDiv('playCT','itemCT','play');
+    this.addToPlaylist = createDiv('addCT','itemCT','add to :');
+    this.addToPlaylist.addEventListener('mouseenter',this.showPlaylist.bind(this));
+    this.addToPlaylist.addEventListener('mouseleave',this.hidePlaylist.bind(this));
 
+    this.containerPlaylist = createDiv('containerPlaylistCT');
+    this.containerPlaylist.style.display = "none";
+    this.containerPlaylist.style.flexDirection = "column";
+    this.containerPlaylist.addEventListener('mouseenter',this.showPlaylist.bind(this));
+    this.containerPlaylist.addEventListener('mouseleave',this.hidePlaylist.bind(this));
+
+    // this.container.appendChild(this.play);
+    this.container.appendChild(this.containerPlaylist);
+    this.container.appendChild(this.addToPlaylist);
+    document.body.appendChild(this.container);
+  }
+  setContainerPlaylist(tabPlaylists){
+    tabPlaylists.forEach(function(ele){
+      if(ele.hasOwnProperty('htmlele')){
+        let tmp = ele.htmlele.cloneNode(true);
+        tmp.addEventListener('click',addTo);
+        this.containerPlaylist.appendChild(tmp);
+
+      }
+      else
+        console.log('received object is invalid : missing property htmlele');
+    }.bind(this));
+  }
+  displayIt(x,y){
+    // console.log('x : '+x+', y : '+y);
+    this.container.style.pointerEvents = "all";
+    this.container.style.left = x+"px";
+    this.container.style.top = y+"px";
+    this.container.style.display = "block";
+  }
+  hide(){
+    this.container.style.display = "none";
+    this.container.style.pointerEvents = "none";
+  }
+  showPlaylist(){
+    this.containerPlaylist.style.display = "flex";
+  }
+  hidePlaylist(){
+    this.containerPlaylist.style.display = "none";
+  }
+
+}
 
 // event listerner function
+//
 function playThis(event){
+  console.log(this);
   var reset = document.getElementsByClassName('playing');
   if(reset != [] && reset != undefined);
   for (var i = 0; i < reset.length; i++) {
@@ -392,12 +452,50 @@ function changeTrack(mode){
 
 function changeSongKeybord(event){
   if(event.key == "n" || event.key == "keyn" || event.key == "ArrowRight"){
+    event.preventDefault();
     changeTrack('next');
   }else if (event.key == "p" || event.key == "keyp" || event.key == "ArrowLeft") {
     changeTrack('previous');
+    event.preventDefault();
   }else if (event.key == " ") {
+    event.preventDefault();
     player.playPause();
   }else if (event.key == "m") {
+    event.preventDefault();
     player.mute();
   }
+}
+
+function diplayContextMenuTrack(event){
+  event.preventDefault();
+  // console.log(this);
+  currentSelection.idTrack = this.dataset.idTrack;
+  currentSelection.chemin = this.dataset.chemin;
+  let x = event.clientX; let y = event.clientY;
+  ct.displayIt(x,y);
+}
+
+// hide the context menu
+function link(){
+  ct.hide();
+}
+
+var currentSelection = {
+  idTrack : "",
+  chemin : ""
+
+}
+
+function addTo(event){
+  // console.log("event : ",event);
+  console.log("this : ",this.dataset.namePlaylist);
+  let xhr = new XMLHttpRequest();
+  xhr.open('POST','import.php?addTo=true',true)
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+  xhr.onloadend = function(){
+    console.log("response : ", xhr.responseText);
+  };
+
+  xhr.onerror = function(e){console.log("erreur addTo : ",e)};
+  xhr.send("id="+this.dataset.idPlaylist+"&name="+this.dataset.namePlaylist+"&idTrack="+currentSelection.idTrack);
 }

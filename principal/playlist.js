@@ -71,6 +71,7 @@ class Playlist{
     this.htmlele = document.createElement('p');
     this.htmlele.id = nom;
     this.htmlele.dataset.idPlaylist = id;
+    this.htmlele.dataset.namePlaylist = nom;
     this.htmlele.className = "playlist";
     this.htmlele.innerText = nom;
     // this.createHtmlEle();
@@ -83,6 +84,9 @@ class Playlist{
     // playlists.addPlaylist(this);
     playlists.container.appendChild(this.htmlele);
     // return span;
+  }
+  getHtmlEle(){
+    return this.htmlele;
   }
 
 }

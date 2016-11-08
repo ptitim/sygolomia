@@ -6,7 +6,7 @@
                 // var_dump($_SESSION['id'])?>
     </span>
     <div class="menu">
-      <a href="index.php"><span id="acceuil" class="hoverThing containedItems" onclick="afficheAcceuil()">Acceuil</span></a>
+      <a href="index.php"><span id="acceuil" class="hoverThing containedItems" onclick="afficheAcceuil()">Home</span></a>
       <!-- <div id="menuVideo" class="hoverThing">
           Video
           <div class="containMenu" id="containVideo">

@@ -15,7 +15,7 @@ require_once('../../getid3/module.audio.wavpack.php');
 require_once('../../getid3/module.audio-video.flv.php');
 require_once('../../getid3/module.audio-video.mpeg.php');
 
-var_dump($_GET);
+// var_dump($_GET);
 if(isset($_GET['maj']) AND $_GET['maj'] === "true"){
     echo "appel";
     majJson($bdd);
@@ -178,5 +178,16 @@ if(isset($_GET['playlist']) && $_GET['playlist'] === "true"){
     }
     file_put_contents("playlist.json",json_encode($tab));
     // header('location: index.php?name='.$name);
+}
+
+if(isset($_GET['addTo']) && $_GET['addTo'] == "true"){
+  $tmp = file_get_contents('php://input');
+  if(isset($_POST['id']) || isset($_POST['name'])){
+    var_dump($_POST);
+
+    $req = $bdd->query('SELECT * FROM playlist where idPlaylist='.intval($_POST['id']));
+    $donnee = $req->fetch();
+    var_dump($donnee);
+  }
 }
 ?>
