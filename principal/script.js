@@ -70,7 +70,7 @@ function createListe(listePrincipal){
         }else{
           if(key != "id"){
             var temp = document.createElement('td');
-            temp.className = "bartri";
+            temp.className = "bartri "+key;
             temp.innerText = data[i][key];
             // var temp = createDiv(data[i][key],"bartri musicElement",data[i][key]);
             ligne.appendChild(temp);
@@ -266,10 +266,25 @@ class Player{
     this.previouss.addEventListener('click',playprevious);
     // afficheur des information du titre jouer
     this.afficheur = createDiv('afficheur');
-    this.titre = createDiv('afgTitre','afg','titre : ');
-    this.album = createDiv('afgAlbum','afg','album : ');
-    this.afficheur.appendChild(this.titre);
-    this.afficheur.appendChild(this.album);
+
+    this.titreDiv = createDiv('','afg');
+    let tmp = document.createElement('span');
+    tmp.id = "afgSpanTitre"; tmp.className = "afg";
+    tmp.innerText = 'titre : ';
+    this.titre = createDiv('afgTitre','afg');
+    this.titreDiv.appendChild(tmp);
+    this.titreDiv.appendChild(this.titre);
+
+    this.albumDiv = createDiv('','afg');
+    tmp = document.createElement('span');
+    tmp.id = "afgSpanAlbum"; tmp.className = "afg";
+    tmp.innerText = 'album : ';
+    this.album = createDiv('afgAlbum','afg');
+    this.albumDiv.appendChild(tmp);
+    this.albumDiv.appendChild(this.album);
+
+    this.afficheur.appendChild(this.titreDiv);
+    this.afficheur.appendChild(this.albumDiv);
 
     this.container = createDiv('containerAudio');
     this.container.appendChild(this.player);
@@ -309,8 +324,8 @@ class Player{
     }
   }
   setAfficheur(){
-    this.titre.innerText = 'titre : '+currentPlay.titre;
-    this.album.innerText = 'album : '+currentPlay.album;
+    this.titre.innerText = currentPlay.titre;
+    this.album.innerText = currentPlay.album;
   }
 }
 

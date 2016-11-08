@@ -11,12 +11,13 @@ $mode = isset($_GET['mode']) AND ($_GET['mode'] === "m" OR $_GET['mode'] === "v"
   <head>
     <meta charset="utf-8">
     <?php include("../importCommun.php");?>
+    <link href="https://fonts.googleapis.com/css?family=Arimo|Taviraj" rel="stylesheet"> 
     <link rel="stylesheet" href="style.css">
   </head>
   <body onload="init()">
   <?php include("menu.php");?>
   <div id="principal">
-    
+
   </div>
 </body>
 </html>

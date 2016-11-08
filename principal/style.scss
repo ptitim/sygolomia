@@ -7,6 +7,7 @@ $couleurSecondaire : #b3555a;
   min-width : 20vmax;
   max-width: 20vmax;
   text-align: left;
+  padding-left: 0.5vmax;
 }
 
 *{
@@ -14,6 +15,7 @@ $couleurSecondaire : #b3555a;
   padding: 0;
   box-sizing: border-box;
   text-decoration: none;
+  font-family: sans-serif;
 }
 
 a{
@@ -129,15 +131,22 @@ a{
 }
 
 .ligne{
+  margin: 0.8vmin 0.2vmax;
+  font-family: 'arimo',sans-serif;
+  min-height: 3em;
   font-size: 0.9em;
   text-align: center;
   display: flex;
-  transition: all 0.2s ease-in-out;
-  border: 2px ridge rgba(210, 48, 48, 0.65);
+  align-items: center;
+  border: 2px ridge rgba(152, 66, 66, 0.65);
   &:hover{
     background-color: rgba(103, 93, 181, 0.53);
   }
 }
+.titre{
+  margin-left: 0.2vmax;
+}
+
 .playing{
   background-color: #82B7B4;
 }
@@ -209,6 +218,7 @@ a{
       border-radius: 25%;
       width: 15vmax;
       max-height: 3vmin;
+      margin: 0.3vmin 1.2vmax;
       &:hover{
         background-color: rgba(24, 47, 131, 0.72);
         color: white;
@@ -223,7 +233,15 @@ a{
   // afficheur
     #afficheur{
       order: 5;
-      width: 100%;
+      width: 95%;
+    }
+    .afg{
+      margin-left: 1vmax;
+      display: flex;
+      flex-direction: row;
+    }
+    #afgSpanTitre,#afgSpanAlbum{
+      border-bottom: 0.4vmin dotted rgba(0, 0, 0, 0.39);
     }
 
 
@@ -238,4 +256,12 @@ a{
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  // bouton add playlists
+  #addPlaylist{
+    text-align: center;
+    font-weight: bolder;
+    border: 0px solid currentColor;
+    border-radius: 20%;
+    background-color: rgb(255, 188, 0);
   }
