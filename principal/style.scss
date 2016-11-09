@@ -120,7 +120,7 @@ a{
     }
 
     #deconnexion{
-      color: rgb(59, 66, 163);
+      color: rgb(35, 48, 228);
       text-shadow: 2px 2px  rgb(27, 7, 7);
       &:hover{
         transition: all 0.2s linear;
@@ -180,6 +180,9 @@ a{
   }
   thead{
     background-color: rgb(224, 221, 221);
+  }
+  #selected{
+    background-color: $couleurSecondaire;
   }
 // end musique
 
@@ -272,11 +275,31 @@ a{
       }
       // bouton add playlists
       #addPlaylist{
+        order: 2;
+        background-color: rgb(255, 188, 0);
+      }
+      #buttonBack{
+        order: 1;
+        background-color: rgba(0, 48, 255, 0.27);
+        transition: all 0.5s ease-in;
+        overflow: hidden;
+      }
+      .playlistButton{
         text-align: center;
         font-weight: bolder;
-        border: 0px solid currentColor;
+        // border: 0px solid currentColor;
         border-radius: 20%;
-        background-color: rgb(255, 188, 0);
+        margin: 2vmin;
+      }
+      .playlist{
+        padding: 1vmin 2vmax;
+        transition: all 0.4s linear;
+        &:hover{
+          background-color: rgba(101, 175, 252, 0.43);
+        }
+      }
+      .selectedPlaylist{
+        background-color: rgba(50, 127, 184, 0.63);
       }
 // end menu playlist
 

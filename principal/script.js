@@ -9,25 +9,19 @@ function loadData(url){
 }
 
 function loadPlaylist(url){
-  var requete = new XMLHttpRequest();
-  requete.open('POST',url,true);
-  requete.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-  requete.send("playlists=true");
-  requete.onloadend = function(){
-    playlistData = JSON.parse(requete.responseText);
-    console.log("requete playlists : "+requete.responseText);
+  ajax('POST',url,function(){
+    playlistData = JSON.parse(this.responseText);
     affichePlaylist();
-    ct.setContainerPlaylist(playlists.tabPlaylists);
-    return playlistData;
-  };
-  requete.onerror = function(){console.log("Erreur chargment playlist")};
+    ctm.setContainerPlaylist(playlists.tabPlaylists);
+  },"playlists=true");
 }
 
 var body;
 var principal;
 var player;
 var playlists;
-var ct;
+var ctm;
+var ctp;
 
 var currentPlay = {
   num : "",
@@ -43,7 +37,8 @@ function init(mode){
    window.addEventListener('keypress',changeSongKeybord);
    afficheListe('m');
    loadPlaylist("http://localhost/sygolomia/principal/createJson.php");
-   ct = new ContextMenuMusique();
+   ctm = new ContextMenuMusique();
+   ctp = new ContextMenuPlaylist();
    window.addEventListener('click',link);
     // afficheAcceuil();
 }
@@ -73,7 +68,7 @@ function createListe(listePrincipal){
             // var temp = createDiv(key,"bartri musicElement",chemin);
             ligne.appendChild(temp);
         }else{
-          if(key != "id"){
+          if(key != "id" && key != "htmlele"){
             var temp = document.createElement('td');
             temp.className = "bartri "+key;
             temp.innerText = data[i][key];
@@ -81,10 +76,10 @@ function createListe(listePrincipal){
             ligne.appendChild(temp);
           }
         }
-
       // if(temp)
       //   ligne.appendChild(temp);
     }
+    data[i]['htmlele'] = ligne;
     ligne.addEventListener('dblclick',playThis);
     ligne.addEventListener('contextmenu',diplayContextMenuTrack);
     listePrincipal.appendChild(ligne);
@@ -108,7 +103,9 @@ function affichePlaylist(){
     let temp = new Playlist(playlistData[i].nom, playlistData[i].idPlaylist);
     playlists.tabPlaylists.push(temp);
     temp.createHtmlEle(playlists);
-    index = i;
+    temp.htmlele.addEventListener('click',displayPlaylist);
+    temp.htmlele.style.order = i+3;
+    temp.htmlele.addEventListener('contextmenu',contextMenuPlaylist);
   }
 }
 
@@ -137,7 +134,6 @@ function afficheMusique(){
   listePrincipal = createListe(listePrincipal);
   liste.appendChild(tete);
   liste.appendChild(listePrincipal);
-  console.log('liste: ',liste);
   return liste;
 }
 
@@ -170,7 +166,6 @@ function afficheListe(event){
   containerleft.appendChild(element);
   player.appendPlayer(containerleft);
   body.appendChild(principal);
-  console.log('element : ',element);
   principal.appendChild(containerleft);
   playlists.displayContainer(principal);
 }
@@ -214,7 +209,6 @@ function afficheAcceuil(){
 
 function resetBody(){
     principal = document.getElementById('principal');
-    console.log(principal);
     if(principal)
     body.removeChild(principal);
 }
@@ -336,63 +330,11 @@ class Player{
   }
 }
 
-class ContextMenuMusique{
-  constructor(){
-    this.container = createDiv('containerCT','contextMenu');
-    this.container.style.position = "absolute";
-    this.container.style.display = "none";
-    this.play = createDiv('playCT','itemCT','play');
-    this.addToPlaylist = createDiv('addCT','itemCT','add to :');
-    this.addToPlaylist.addEventListener('mouseenter',this.showPlaylist.bind(this));
-    this.addToPlaylist.addEventListener('mouseleave',this.hidePlaylist.bind(this));
 
-    this.containerPlaylist = createDiv('containerPlaylistCT');
-    this.containerPlaylist.style.display = "none";
-    this.containerPlaylist.style.flexDirection = "column";
-    this.containerPlaylist.addEventListener('mouseenter',this.showPlaylist.bind(this));
-    this.containerPlaylist.addEventListener('mouseleave',this.hidePlaylist.bind(this));
-
-    // this.container.appendChild(this.play);
-    this.container.appendChild(this.containerPlaylist);
-    this.container.appendChild(this.addToPlaylist);
-    document.body.appendChild(this.container);
-  }
-  setContainerPlaylist(tabPlaylists){
-    tabPlaylists.forEach(function(ele){
-      if(ele.hasOwnProperty('htmlele')){
-        let tmp = ele.htmlele.cloneNode(true);
-        tmp.addEventListener('click',addTo);
-        this.containerPlaylist.appendChild(tmp);
-
-      }
-      else
-        console.log('received object is invalid : missing property htmlele');
-    }.bind(this));
-  }
-  displayIt(x,y){
-    // console.log('x : '+x+', y : '+y);
-    this.container.style.pointerEvents = "all";
-    this.container.style.left = x+"px";
-    this.container.style.top = y+"px";
-    this.container.style.display = "block";
-  }
-  hide(){
-    this.container.style.display = "none";
-    this.container.style.pointerEvents = "none";
-  }
-  showPlaylist(){
-    this.containerPlaylist.style.display = "flex";
-  }
-  hidePlaylist(){
-    this.containerPlaylist.style.display = "none";
-  }
-
-}
 
 // event listerner function
 //
 function playThis(event){
-  console.log(this);
   var reset = document.getElementsByClassName('playing');
   if(reset != [] && reset != undefined);
   for (var i = 0; i < reset.length; i++) {
@@ -430,7 +372,7 @@ function changeTrack(mode){
       currentPlay.htmlele = currentPlay.htmlele.previousElementSibling;
   }
   else
-    console.log("erreur mode incorect, function nextTrack");
+    console.log("Error incorect mode, function nextTrack");
 
   if(next){
     var source = next.dataset.chemin;
@@ -471,31 +413,70 @@ function diplayContextMenuTrack(event){
   // console.log(this);
   currentSelection.idTrack = this.dataset.idTrack;
   currentSelection.chemin = this.dataset.chemin;
+  currentSelection.htmlele = this;
   let x = event.clientX; let y = event.clientY;
-  ct.displayIt(x,y);
+  ctm.displayIt(x,y);
+  currentSelection.htmlele.id += "selected";
 }
 
-// hide the context menu
+// hide the context menu for musiques
 function link(){
-  ct.hide();
+  if(currentSelection.htmlele != ""){
+    ctm.hide();
+    currentSelection.htmlele.id = currentSelection.htmlele.id.replace("selected","");
+  }
+  ctp.hide();
 }
 
 var currentSelection = {
   idTrack : "",
-  chemin : ""
-
+  chemin : "",
+  htmlele: ""
 }
 
 function addTo(event){
-  // console.log("event : ",event);
-  console.log("this : ",this.dataset.namePlaylist);
-  let xhr = new XMLHttpRequest();
-  xhr.open('POST','import.php?addTo=true',true)
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-  xhr.onloadend = function(){
-    console.log("response : ", xhr.responseText);
-  };
+  let tmp = "idPlaylist="+this.dataset.idPlaylist+"&name="+this.dataset.namePlaylist+"&idTrack="+currentSelection.idTrack;
+  ajax('POST','import.php?addTo=true',handleResponseAddTo,tmp);
+}
 
-  xhr.onerror = function(e){console.log("erreur addTo : ",e)};
-  xhr.send("id="+this.dataset.idPlaylist+"&name="+this.dataset.namePlaylist+"&idTrack="+currentSelection.idTrack);
+function handleResponseAddTo(bool){
+  if(this.responseText == "true"){
+    currentSelection.htmlele.style.transition = "all 1s linear";
+    currentSelection.htmlele.style.backgroundColor = "rgb(83, 177, 55)";
+    setTimeout(function(){currentSelection.htmlele.style.backgroundColor = "white";},1000);
+    setTimeout(function(){currentSelection.htmlele.id = currentSelection.htmlele.id.replace('selected','');},2000);
+  }
+  else {
+    alert("Error track not added");
+  }
+}
+
+function aficheTabmus(tab){
+  let tbody = document.createElement('tbody');
+  let liste = document.getElementById('liste');
+  tbody.id= "listePrincipal";
+  for (var i = 0; i < tab.length; i++) {
+    tbody.appendChild(tab[i].htmlele);
+  }
+  liste.appendChild(tbody);
+}
+
+
+function ajax(type,url,callback,send){
+  let xhr = new XMLHttpRequest();
+  let verif = true;
+  if(type == "POST" && url!= ""){
+    xhr.open(type,url,true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+  }else if(type == "GET" && url != ""){
+    xhr.open(type,url,true);
+  }else {
+    alert("Error ajax type is incorect");
+    verif= false;
+  }
+  if(verif){
+    xhr.onloadend = callback.bind(xhr);
+    xhr.send(send);
+  }
+  return verif;
 }

@@ -147,6 +147,7 @@ function getMeta($fileInfo,$fileName,$type,$chemin){
               'chemin'=> $chemin];
 }
 
+// renvoie les playlist pour l'utilisateur qui se connecte
 if(isset($_GET['playlist']) && $_GET['playlist'] === "true"){
     $tmp = file_get_contents('php://input');
     $tmp = json_decode($tmp);
@@ -180,14 +181,51 @@ if(isset($_GET['playlist']) && $_GET['playlist'] === "true"){
     // header('location: index.php?name='.$name);
 }
 
+// rajoute une musique a une playlist
+//
 if(isset($_GET['addTo']) && $_GET['addTo'] == "true"){
-  $tmp = file_get_contents('php://input');
-  if(isset($_POST['id']) || isset($_POST['name'])){
-    var_dump($_POST);
+  // $tmp = file_get_contents('php://input');
+  if(isset($_POST['idPlaylist']) || isset($_POST['name']) AND isset($_POST['idTrack'])){
+    $req = $bdd->prepare('INSERT INTO playlistList(idMusique,idPlaylist) VALUES (:idMusique,:idPlaylist)');
+    $idmus = intval($_POST['idTrack']);
+    $idPla = intval($_POST['idPlaylist']);
+    $req->bindParam('idMusique',$idmus,PDO::PARAM_INT);
+    $req->bindParam('idPlaylist',$idPla,PDO::PARAM_INT);
+    $test = $req->execute();
 
-    $req = $bdd->query('SELECT * FROM playlist where idPlaylist='.intval($_POST['id']));
-    $donnee = $req->fetch();
-    var_dump($donnee);
+    if($test == true){
+      echo "true";
+    }else{
+      echo "false";
+    }
   }
 }
+
+//Renvoie les musiques d'une playlist lors de l'appel de cette playlist
+if(isset($_GET['getPlaylist']) && $_GET['getPlaylist'] == "true"){
+  if(isset($_POST['playlistid'])){
+    $idValue = intval($_POST['playlistid']);
+    $req = $bdd->prepare('SELECT * FROM playlistList WHERE idPlaylist=:idP');
+    $req->bindParam('idP',$idValue,PDO::PARAM_INT);
+    $req->execute();
+    $tab = [];
+    while($donnee = $req->fetch()){
+      array_push($tab,$donnee);
+    }
+    echo json_encode($tab);
+  }
+}
+
+
+// supression d'une playlist
+
+if(isset($_GET['deletePlaylist']) && $_GET['deletePlaylist'] == 'true'){
+  if(isset($_POST['idPlaylist'])){
+    echo "voui";
+    $idP = intval($_POST['idPlaylist']);
+    $req = $bdd->query('DELETE FROM playlist WHERE idPlaylist='.$idP);
+    $req = $bdd->query('DELETE FROM playlist WHERE idPlaylist='.$idP);
+  }
+}
+
 ?>

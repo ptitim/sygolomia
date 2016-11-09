@@ -89,7 +89,7 @@ a {
   height: 4em; }
 
 #deconnexion {
-  color: #3b42a3;
+  color: #2330e4;
   text-shadow: 2px 2px #1b0707; }
   #deconnexion:hover {
     transition: all 0.2s linear;
@@ -142,6 +142,9 @@ a {
 
 thead {
   background-color: #e0dddd; }
+
+#selected {
+  background-color: #b3555a; }
 
 #containerleft {
   order: 2;
@@ -216,11 +219,29 @@ thead {
   align-items: center; }
 
 #addPlaylist {
+  order: 2;
+  background-color: #ffbc00; }
+
+#buttonBack {
+  order: 1;
+  background-color: rgba(0, 48, 255, 0.27);
+  transition: all 0.5s ease-in;
+  overflow: hidden; }
+
+.playlistButton {
   text-align: center;
   font-weight: bolder;
-  border: 0px solid currentColor;
   border-radius: 20%;
-  background-color: #ffbc00; }
+  margin: 2vmin; }
+
+.playlist {
+  padding: 1vmin 2vmax;
+  transition: all 0.4s linear; }
+  .playlist:hover {
+    background-color: rgba(101, 175, 252, 0.43); }
+
+.selectedPlaylist {
+  background-color: rgba(50, 127, 184, 0.63); }
 
 #containerCT {
   position: absolute;
