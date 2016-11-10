@@ -55,9 +55,6 @@ class Playlists{
     this.formContainer.appendChild(this.inputName);
     this.formContainer.appendChild(this.containerButton);
     this.divPrinc.appendChild(this.formContainer);
-    // this.divPrinc.appendChild(this.containerButton);
-    // this.divPrinc.appendChild(this.buttonOk);
-    // this.divPrinc.appendChild(this.buttonCancel);
     document.body.appendChild(this.divPrinc);
     removeEventListenerKeybord();
     this.inputName.focus();

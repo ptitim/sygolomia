@@ -65,7 +65,7 @@ function ajax(type,url,callback,send){
 function init(mode){
    body = document.getElementsByTagName('body')[0];
    principal = document.getElementById('principal');
-   // add event listenr keypress on window  
+   // add event listenr keypress on window
    addEventListenerKeybord();
    afficheListe('m');
    loadPlaylist("http://localhost/sygolomia/principal/createJson.php");
@@ -112,8 +112,10 @@ function createListe(listePrincipal){
       //   ligne.appendChild(temp);
     }
     data[i]['htmlele'] = ligne;
+    ligne.draggable = "true";
     ligne.addEventListener('dblclick',playThis);
     ligne.addEventListener('contextmenu',diplayContextMenuTrack);
+    ligne.addEventListener('drag',dragTrack);
     listePrincipal.appendChild(ligne);
   }
   return listePrincipal;
@@ -138,6 +140,7 @@ function affichePlaylist(){
     temp.htmlele.addEventListener('click',displayPlaylist);
     temp.htmlele.style.order = i+3;
     temp.htmlele.addEventListener('contextmenu',contextMenuPlaylist);
+    temp.htmlele.addEventListener('dragover',dragoverPlaylist);
   }
 }
 
@@ -510,4 +513,15 @@ function removeEventListenerKeybord(){
 function addEventListenerKeybord(){
   window.addEventListener('keypress',changeSongKeybord);
 
+}
+var a;
+function dragTrack(event){
+  a=event;
+  console.log("drag : ",event);
+}
+
+var b;
+function dragoverPlaylist(event){
+  b=event;
+  console.log("over : ",event);
 }
