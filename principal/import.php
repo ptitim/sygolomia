@@ -224,7 +224,7 @@ if(isset($_GET['deletePlaylist']) && $_GET['deletePlaylist'] == 'true'){
     echo "voui";
     $idP = intval($_POST['idPlaylist']);
     $req = $bdd->query('DELETE FROM playlist WHERE idPlaylist='.$idP);
-    $req = $bdd->query('DELETE FROM playlist WHERE idPlaylist='.$idP);
+    $req = $bdd->query('DELETE FROM playlistList WHERE idPlaylist='.$idP);
   }
 }
 

@@ -230,6 +230,10 @@ a{
         color: white;
       }
     }
+    .hoverJs{
+      background-color: rgba(24, 47, 131, 0.72);
+      color: white;
+    }
     #next{
       order: 3;
     }
@@ -342,3 +346,36 @@ a{
 
 
 // end contextmenu
+
+// menu playlist creation
+  #formContainer{
+      background-color: white;
+      padding: 5vmin;
+      border: 0.4vmin solid grey;
+      border-radius: 5%;
+      background: rgb(245,246,246); /* Old browsers */
+      background: -moz-linear-gradient(-45deg, rgba(245,246,246,1) 0%, rgba(207,208,211,1) 19%, rgba(207,208,211,1) 79%, rgba(245,246,246,1) 100%); /* FF3.6-15 */
+      background: -webkit-linear-gradient(-45deg, rgba(245,246,246,1) 0%,rgba(207,208,211,1) 19%,rgba(207,208,211,1) 79%,rgba(245,246,246,1) 100%); /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(135deg, rgba(245,246,246,1) 0%,rgba(207,208,211,1) 19%,rgba(207,208,211,1) 79%,rgba(245,246,246,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f6f6', endColorstr='#f5f6f6',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+      -webkit-box-shadow: 7px 5px 32px 0px $couleurPrincipal;
+      -moz-box-shadow: 7px 5px 32px 0px $couleurPrincipal;
+      box-shadow: 7px 5px 32px 0px $couleurPrincipal;
+  }
+  #inputName{
+    transition: all 0.5s linear;
+    border-radius: 5px;
+    margin: 5%;
+  }
+  #containerButton{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .formButton{
+    border: none;
+    background-color: none;
+    // margin-right: 20%;
+  }

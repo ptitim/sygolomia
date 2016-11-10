@@ -1,5 +1,29 @@
+//
+// Variable Globales
+//
 var data = "";
 var playlistData = "";
+var body;
+var principal;
+var player;
+var playlists;
+var ctm;
+var ctp;
+
+var currentPlay = {
+  num : "",
+  titre : "",
+  album : "",
+  artiste : "",
+  htmlele : ""
+}
+//
+// FIN des Variable globales
+//
+
+//
+// requete Ajax
+//
 function loadData(url){
     var xhr = new XMLHttpRequest();
     xhr.onloadend = function(){data = JSON.parse(xhr.responseText); return data};
@@ -16,25 +40,33 @@ function loadPlaylist(url){
   },"playlists=true");
 }
 
-var body;
-var principal;
-var player;
-var playlists;
-var ctm;
-var ctp;
-
-var currentPlay = {
-  num : "",
-  titre : "",
-  album : "",
-  artiste : "",
-  htmlele : ""
+function ajax(type,url,callback,send){
+  let xhr = new XMLHttpRequest();
+  let verif = true;
+  if(type == "POST" && url!= ""){
+    xhr.open(type,url,true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+  }else if(type == "GET" && url != ""){
+    xhr.open(type,url,true);
+  }else {
+    alert("Error ajax type is incorect");
+    verif= false;
+  }
+  if(verif){
+    xhr.onloadend = callback.bind(xhr);
+    xhr.send(send);
+  }
+  return verif;
 }
+//
+// FIN des requete ajax
+//
 
 function init(mode){
    body = document.getElementsByTagName('body')[0];
    principal = document.getElementById('principal');
-   window.addEventListener('keypress',changeSongKeybord);
+   // add event listenr keypress on window  
+   addEventListenerKeybord();
    afficheListe('m');
    loadPlaylist("http://localhost/sygolomia/principal/createJson.php");
    ctm = new ContextMenuMusique();
@@ -251,7 +283,7 @@ function getTrack(chemin){
   }
 }
 
-
+//
 // object
 //
 class Player{
@@ -330,8 +362,11 @@ class Player{
   }
 }
 
+//
+// FIN des objet
+//
 
-
+//
 // event listerner function
 //
 function playThis(event){
@@ -373,7 +408,6 @@ function changeTrack(mode){
   }
   else
     console.log("Error incorect mode, function nextTrack");
-
   if(next){
     var source = next.dataset.chemin;
     player.setSource(source);
@@ -396,8 +430,14 @@ function changeSongKeybord(event){
   if(event.key == "n" || event.key == "keyn" || event.key == "ArrowRight"){
     event.preventDefault();
     changeTrack('next');
+    let next = document.getElementById('next');
+    next.className += " hoverJs";
+    setTimeout(function(){next.className = next.className.replace(" hoverJs","")},1000);
   }else if (event.key == "p" || event.key == "keyp" || event.key == "ArrowLeft") {
     changeTrack('previous');
+    let previous = document.getElementById('previous');
+    previous.className += " hoverJs";
+    setTimeout(function(){previous.className = previous.className.replace(" hoverJs","")},1000);
     event.preventDefault();
   }else if (event.key == " ") {
     event.preventDefault();
@@ -410,7 +450,6 @@ function changeSongKeybord(event){
 
 function diplayContextMenuTrack(event){
   event.preventDefault();
-  // console.log(this);
   currentSelection.idTrack = this.dataset.idTrack;
   currentSelection.chemin = this.dataset.chemin;
   currentSelection.htmlele = this;
@@ -419,7 +458,7 @@ function diplayContextMenuTrack(event){
   currentSelection.htmlele.id += "selected";
 }
 
-// hide the context menu for musiques
+// hide the contexts menu
 function link(){
   if(currentSelection.htmlele != ""){
     ctm.hide();
@@ -461,22 +500,14 @@ function aficheTabmus(tab){
   liste.appendChild(tbody);
 }
 
+//
+// FIN des event listener
+//
 
-function ajax(type,url,callback,send){
-  let xhr = new XMLHttpRequest();
-  let verif = true;
-  if(type == "POST" && url!= ""){
-    xhr.open(type,url,true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-  }else if(type == "GET" && url != ""){
-    xhr.open(type,url,true);
-  }else {
-    alert("Error ajax type is incorect");
-    verif= false;
-  }
-  if(verif){
-    xhr.onloadend = callback.bind(xhr);
-    xhr.send(send);
-  }
-  return verif;
+function removeEventListenerKeybord(){
+  window.removeEventListener('keypress',changeSongKeybord);
+}
+function addEventListenerKeybord(){
+  window.addEventListener('keypress',changeSongKeybord);
+
 }

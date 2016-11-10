@@ -30,43 +30,66 @@ class Playlists{
   }
   afgFormulaire(){
     this.divPrinc = createDiv('playtlistMaker');
+    this.formContainer = createDiv('formContainer');
+    this.divName = createDiv('divName','itemFormulairePlaylist',"Entrez le nom de la playlist : ");
+    this.containerButton = createDiv('containerButton','itemFormulairePlaylist');
     this.inputName = document.createElement('input');
     this.inputName.id = "inputName";
     this.inputName.type = "text";
     this.inputName.name = "name";
     this.buttonOk = document.createElement('button');
     this.buttonOk.innerText = "create";
+    this.buttonOk.className = "formButton";
+
     this.buttonOk.addEventListener('click',this.submit.bind(this));
+    this.inputName.addEventListener('keyup',this.submit.bind(this));
 
     this.buttonCancel = document.createElement('button');
     this.buttonCancel.innerText = "cancel";
+    this.buttonCancel.className = "formButton";
     this.buttonCancel.addEventListener('click',this.cancel.bind(this));
-    this.divPrinc.appendChild(this.inputName);
-    this.divPrinc.appendChild(this.buttonOk);
-    this.divPrinc.appendChild(this.buttonCancel);
 
-
+    this.containerButton.appendChild(this.buttonCancel);
+    this.containerButton.appendChild(this.buttonOk);
+    this.formContainer.appendChild(this.divName);
+    this.formContainer.appendChild(this.inputName);
+    this.formContainer.appendChild(this.containerButton);
+    this.divPrinc.appendChild(this.formContainer);
+    // this.divPrinc.appendChild(this.containerButton);
+    // this.divPrinc.appendChild(this.buttonOk);
+    // this.divPrinc.appendChild(this.buttonCancel);
     document.body.appendChild(this.divPrinc);
-    this.inputName.autofocus = "autofocus";
+    removeEventListenerKeybord();
+    this.inputName.focus();
   }
-  submit(){
-      let input = document.getElementById('inputName');
-      let name = input.value;
-      let tmp = new Playlist(name,this.playlistCounter);
-      this.tabPlaylists.push(tmp);
-      document.body.removeChild(input.parentElement);
-      this.container.appendChild(tmp.htmlele);
-      let xhr = new XMLHttpRequest();
-      xhr.open('POST','import.php?playlist=true');
-      let dataplaylist = JSON.stringify(this);
-      console.log("data : "+data);
-      xhr.onloadend = function(){
-        console.log("response : "+ xhr.responseText);
-      }
-      xhr.send(dataplaylist);
+  submit(event){
+      // console.log(this.inputName.value);
+      // a = this.inputName.value;
+      if((event.type == "click" || (event.type == 'keyup' && event.key == "Enter" )) && this.inputName.value != ""){
+        let input = document.getElementById('inputName');
+        let name = input.value;
+        let tmp = new Playlist(name,this.playlistCounter);
+        tmp.htmlele.style.order = this.tabPlaylists[this.tabPlaylists.length-1].htmlele.style.order + 1;
+        this.tabPlaylists.push(tmp);
+        this.cancel();
+        this.container.appendChild(tmp.htmlele);
+
+        let dataplaylist = JSON.stringify(this);
+        ajax('POST','import.php?playlist=true',function(){},dataplaylist);
+        // console.log("data : "+data);
+        // let xhr = new XMLHttpRequest();
+        // xhr.open('POST','import.php?playlist=true');
+        // xhr.onloadend =
+        // xhr.send(dataplaylist);
+    }else if ((event.type == "click" || (event.type == 'keyup' && event.key == "Enter" )) && this.inputName.value == "") {
+        this.inputName.style.backgroundColor = "rgba(228, 103, 103, 1)";
+        setTimeout(function(){this.inputName.style.backgroundColor = "white"}.bind(this),600);
+    }
   }
   cancel(){
-    document.body.removeChild(this.inputName.parentElement);
+    document.body.removeChild(this.divPrinc);
+    addEventListenerKeybord();
+
   }
   afficheBackButton(data){
     if(!this.backButtonDisplayed){
@@ -87,16 +110,9 @@ class Playlist{
     this.htmlele.dataset.namePlaylist = nom;
     this.htmlele.className = "playlist";
     this.htmlele.innerText = nom;
-    // this.createHtmlEle();
   }
   createHtmlEle(playlists){
-    // let span = document.createElement('span');
-    // span.id = this.nom;
-    // span.innerText = this.nom;
-    // span.className = "playlists";
-    // playlists.addPlaylist(this);
     playlists.container.appendChild(this.htmlele);
-    // return span;
   }
   getHtmlEle(){
     return this.htmlele;
@@ -104,6 +120,9 @@ class Playlist{
 }
 
 function displayPlaylist(event){
+  currentPlaylist.idPlaylist = this.dataset.idPlaylist;
+  currentPlaylist.playlistName = this.dataset.namePlaylist;
+  currentPlaylist.htmlele = this;
   for (var i = 0; i < playlists.tabPlaylists.length; i++) {
     let tmp = playlists.tabPlaylists[i].htmlele.className;
     playlists.tabPlaylists[i].htmlele.className = tmp.replace(" selectedPlaylist","");
@@ -114,11 +133,11 @@ function displayPlaylist(event){
   ajax('POST','import.php?getPlaylist=true',handlePlaylist,'playlistid='+idP);
 }
 
-class musique{
-  constructor(idMusique){
-    this.idMusique = idMusique;
-  }
-}
+// class musique{
+//   constructor(idMusique){
+//     this.idMusique = idMusique;
+//   }
+// }
 
 
 class ContextMenu{
@@ -194,12 +213,16 @@ class ContextMenuPlaylist extends ContextMenu{
       this.container.appendChild(this.delete);
   }
   deletePlaylist(event){
-    let _this = event.target;
+    let _this = currentPlaylist.htmlele;
     if (confirm("Etes vous sure ?")) {
       console.log("ye suis la");
-      ajax('POST','import.php?deletePlaylist=true',function(){},'idPlaylist='+_this.dataset.idPlaylist);
+      ajax('POST','import.php?deletePlaylist=true',function(){},'idPlaylist='+currentPlaylist.idPlaylist);
       _this.parentElement.removeChild(_this);
+      if(_this == currentPlaylist.htmlele){
+        backHome();
+      }
     }
+
   }
 
 }
@@ -209,13 +232,40 @@ class ContextMenuPlaylist extends ContextMenu{
 //
 //
 
+//
+// Variable globales
+//
+var a;
+var currentPlaylist = {
+  idPlaylist : "",
+  playlistName : "",
+  htmlele : ""
+};
+
+var currentPlaylistSelectes = {
+  idPlaylist : "",
+  playlistName : "",
+  htmlele : ""
+}
+//
+// Fin des varibles globales
+//
+
+//
+// event Listener
+//
+
 function contextMenuPlaylist(event){
   event.preventDefault();
+  currentPlaylistSelectes.idPlaylist = this.dataset.idPlaylist;
+  currentPlaylistSelectes.playlistName = this.dataset.namePlaylist;
+  currentPlaylistSelectes.htmlele = this;
   ctp.displayIt(event.clientX,event.clientY);
+
 }
 
+//hide back button
 function backHome(event){
-    //hide back button
     this.style.maxHeight = "0";
 
     for (var i = 0; i < playlists.tabPlaylists.length; i++) {
@@ -246,3 +296,7 @@ function handlePlaylist(e){
   aficheTabmus(playlistMus);
   playlists.afficheBackButton();
 }
+
+//
+// FIN des event listener
+//
