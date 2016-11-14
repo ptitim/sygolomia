@@ -89,7 +89,7 @@ a {
   height: 4em; }
 
 #deconnexion {
-  color: #2330e4;
+  color: #8a90e4;
   text-shadow: 2px 2px #1b0707; }
   #deconnexion:hover {
     transition: all 0.2s linear;
@@ -144,7 +144,7 @@ thead {
   background-color: #e0dddd; }
 
 #selected {
-  background-color: #b3555a; }
+  background-color: rgba(60, 254, 195, 0.63); }
 
 #containerleft {
   order: 2;
@@ -179,6 +179,7 @@ thead {
   margin: 0.3vmin 1.2vmax; }
   .audioButton:hover {
     background-color: rgba(24, 47, 131, 0.72);
+    box-shadow: -3px 4px 2px 0px rgba(0, 0, 0, 0.75);
     color: white; }
 
 .hoverJs {
@@ -224,13 +225,20 @@ thead {
 
 #addPlaylist {
   order: 2;
-  background-color: #ffbc00; }
+  background-color: rgba(255, 188, 0, 0.63);
+  transition: all 0.2s linear; }
+  #addPlaylist:hover {
+    background-color: rgba(255, 188, 0, 0.82);
+    box-shadow: -3px 4px 2px 0px rgba(0, 0, 0, 0.75); }
 
 #buttonBack {
   order: 1;
   background-color: rgba(0, 48, 255, 0.27);
-  transition: all 0.5s ease-in;
+  transition: all 0.2s ease-in;
   overflow: hidden; }
+  #buttonBack:hover {
+    background-color: rgba(0, 47, 251, 0.65);
+    box-shadow: -3px 4px 2px 0px rgba(0, 0, 0, 0.75); }
 
 .playlistButton {
   text-align: center;
@@ -307,6 +315,11 @@ thead {
 
 .formButton {
   border: none;
-  background-color: none; }
+  background-color: rgba(26, 119, 147, 0.71);
+  padding: 1vmin;
+  transition: all 0.3s linear; }
+  .formButton:hover {
+    background-color: rgba(26, 119, 147, 0.96);
+    box-shadow: -3px 4px 2px 0px rgba(0, 0, 0, 0.75); }
 
 /*# sourceMappingURL=style.css.map */

@@ -72,6 +72,8 @@ function init(mode){
    ctm = new ContextMenuMusique();
    ctp = new ContextMenuPlaylist();
    window.addEventListener('click',link);
+  //  document.addEventListener('drop',dragdropPlaylist);
+  //  document.addEventListener('drag',function(event){console.log('draaaaag')});
     // afficheAcceuil();
 }
 
@@ -115,7 +117,11 @@ function createListe(listePrincipal){
     ligne.draggable = "true";
     ligne.addEventListener('dblclick',playThis);
     ligne.addEventListener('contextmenu',diplayContextMenuTrack);
+
     ligne.addEventListener('drag',dragTrack);
+    ligne.addEventListener('dragstart',dragStartTrack);
+    ligne.addEventListener('dragend',dragEndTrack);
+
     listePrincipal.appendChild(ligne);
   }
   return listePrincipal;
@@ -141,6 +147,9 @@ function affichePlaylist(){
     temp.htmlele.style.order = i+3;
     temp.htmlele.addEventListener('contextmenu',contextMenuPlaylist);
     temp.htmlele.addEventListener('dragover',dragoverPlaylist);
+    temp.htmlele.addEventListener('dragenter',dragenterPlaylist);
+    temp.htmlele.addEventListener('dragleave',dragleavePlaylist);
+    temp.htmlele.addEventListener('drop',dragdropPlaylist);
   }
 }
 
@@ -485,8 +494,8 @@ function handleResponseAddTo(bool){
   if(this.responseText == "true"){
     currentSelection.htmlele.style.transition = "all 1s linear";
     currentSelection.htmlele.style.backgroundColor = "rgb(83, 177, 55)";
-    setTimeout(function(){currentSelection.htmlele.style.backgroundColor = "white";},1000);
-    setTimeout(function(){currentSelection.htmlele.id = currentSelection.htmlele.id.replace('selected','');},2000);
+    setTimeout(function(){currentSelection.htmlele.style.backgroundColor = "white";},800);
+    setTimeout(function(){currentSelection.htmlele.id = currentSelection.htmlele.id.replace('selected','');},1200);
   }
   else {
     alert("Error track not added");
@@ -507,21 +516,86 @@ function aficheTabmus(tab){
 // FIN des event listener
 //
 
+//
+// Gestion des ecoute clavier sur la fenetre
+//
 function removeEventListenerKeybord(){
   window.removeEventListener('keypress',changeSongKeybord);
 }
 function addEventListenerKeybord(){
   window.addEventListener('keypress',changeSongKeybord);
-
 }
+
+
 var a;
 function dragTrack(event){
-  a=event;
-  console.log("drag : ",event);
+  // event.preventDefault();
+
+  // a=event;
+  // console.log("drag : ",event);
 }
 
 var b;
 function dragoverPlaylist(event){
-  b=event;
-  console.log("over : ",event);
+  event.preventDefault();
+
+  // b=event;
+  // console.log("over : ",event);
+
+  // let tmp = "idPlaylist="+this.dataset.idPlaylist+"&name="+this.dataset.namePlaylist+"&idTrack="+currentSelection.idTrack;
+  // ajax('POST','import.php?addTo=true',handleResponseAddTo,tmp);
+}
+
+function dragStartTrack(event){
+  // event.preventDefault();
+
+  console.log("start drag of : ",this);
+  currentSelection.idTrack = this.dataset.idTrack;
+  currentSelection.chemin = this.dataset.chemin;
+  currentSelection.htmlele = this;
+  currentSelection.htmlele.id += "selected";
+  event.dataTransfer.setData('selection',currentSelection);
+
+}
+function dragEndTrack(event){
+  event.preventDefault();
+  console.log("end drag of : ",this);
+  console.log(currentPlaylistSelected);
+  currentSelection.htmlele.id = currentSelection.htmlele.id.replace("selected","");
+  if(currentPlaylistSelected.htmlele != ""){
+    console.log("bonjour");
+  }
+}
+
+function dragenterPlaylist(event){
+  event.preventDefault();
+
+  console.log("enter : ",this);
+  // this.style.border = "2px dotted rgb(140, 230, 11)";
+  this.className += " selectedPlaylist";
+  currentPlaylistSelected.htmlele = this;
+  currentPlaylistSelected.idPlaylist = this.dataset.idPlaylist;
+  currentPlaylistSelected.playlistName = this.dataset.namePlaylist;
+}
+
+function dragleavePlaylist(event){
+  event.preventDefault();
+
+  console.log("leave : ",this);
+  this.style.border = "";
+
+  this.className = this.className.replace("selectedPlaylist","");
+  currentPlaylistSelected.htmlele = "";
+  currentPlaylistSelected.idPlaylist = "";
+  currentPlaylistSelected.playlistName = "";
+}
+
+function dragdropPlaylist(event){
+  event.preventDefault();
+  currentPlaylistSelected.htmlele.className = currentPlaylistSelected.htmlele.className.replace('selectedPlaylist','');
+
+  console.log("drop : ",this);
+  // let data = event.dataTransfer.getData('selection');
+  let tmp = "idPlaylist="+this.dataset.idPlaylist+"&name="+this.dataset.namePlaylist+"&idTrack="+currentSelection.idTrack;
+  ajax('POST','import.php?addTo=true',handleResponseAddTo,tmp);
 }

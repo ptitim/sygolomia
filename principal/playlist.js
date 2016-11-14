@@ -60,7 +60,7 @@ class Playlists{
     this.inputName.focus();
   }
   submit(event){
-      // console.log(this.inputName.value);
+      console.log(event);
       // a = this.inputName.value;
       if((event.type == "click" || (event.type == 'keyup' && event.key == "Enter" )) && this.inputName.value != ""){
         let input = document.getElementById('inputName');
@@ -81,6 +81,8 @@ class Playlists{
     }else if ((event.type == "click" || (event.type == 'keyup' && event.key == "Enter" )) && this.inputName.value == "") {
         this.inputName.style.backgroundColor = "rgba(228, 103, 103, 1)";
         setTimeout(function(){this.inputName.style.backgroundColor = "white"}.bind(this),600);
+    }else if (event.type == 'keyup' && event.key == "Escape") {
+        this.cancel();
     }
   }
   cancel(){
@@ -239,7 +241,7 @@ var currentPlaylist = {
   htmlele : ""
 };
 
-var currentPlaylistSelectes = {
+var currentPlaylistSelected = {
   idPlaylist : "",
   playlistName : "",
   htmlele : ""
@@ -254,9 +256,9 @@ var currentPlaylistSelectes = {
 
 function contextMenuPlaylist(event){
   event.preventDefault();
-  currentPlaylistSelectes.idPlaylist = this.dataset.idPlaylist;
-  currentPlaylistSelectes.playlistName = this.dataset.namePlaylist;
-  currentPlaylistSelectes.htmlele = this;
+  currentPlaylistSelected.idPlaylist = this.dataset.idPlaylist;
+  currentPlaylistSelected.playlistName = this.dataset.namePlaylist;
+  currentPlaylistSelected.htmlele = this;
   ctp.displayIt(event.clientX,event.clientY);
 
 }
@@ -264,7 +266,9 @@ function contextMenuPlaylist(event){
 //hide back button
 function backHome(event){
     this.style.maxHeight = "0";
-
+    currentPlaylist.htmlele = "";
+    currentPlaylist.idPlaylist = "";
+    currentPlaylist.playlistName = "";
     for (var i = 0; i < playlists.tabPlaylists.length; i++) {
       let tmp = playlists.tabPlaylists[i].htmlele.className;
       playlists.tabPlaylists[i].htmlele.className = tmp.replace(" selectedPlaylist","");
