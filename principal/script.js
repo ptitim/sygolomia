@@ -493,7 +493,7 @@ function handleResponseAddTo(bool){
   if(this.responseText == "true"){
     currentSelection.htmlele.style.transition = "all 1s linear";
     currentSelection.htmlele.style.backgroundColor = "rgb(83, 177, 55)";
-    setTimeout(function(){currentSelection.htmlele.style.backgroundColor = "white";},800);
+    setTimeout(function(){currentSelection.htmlele.style.backgroundColor = "transparent";},800);
     setTimeout(function(){currentSelection.htmlele.id = currentSelection.htmlele.id.replace('selected','');},1200);
   }
   else {
@@ -502,13 +502,17 @@ function handleResponseAddTo(bool){
 }
 
 function aficheTabmus(tab){
-  let tbody = document.createElement('tbody');
-  let liste = document.getElementById('liste');
-  tbody.id= "listePrincipal";
-  for (var i = 0; i < tab.length; i++) {
-    tbody.appendChild(tab[i].htmlele);
-  }
-  liste.appendChild(tbody);
+  playlistTransition();
+  setTimeout(function(){
+    let tbody = document.createElement('tbody');
+    let liste = document.getElementById('liste');
+    tbody.id= "listePrincipal";
+    for (var i = 0; i < tab.length; i++) {
+      tbody.appendChild(tab[i].htmlele);
+    }
+    liste.appendChild(tbody);
+  },400);
+
 }
 
 //
@@ -570,4 +574,17 @@ function dragdropPlaylist(event){
 
   let tmp = "idPlaylist="+this.dataset.idPlaylist+"&name="+this.dataset.namePlaylist+"&idTrack="+currentSelection.idTrack;
   ajax('POST','import.php?addTo=true',handleResponseAddTo,tmp);
+}
+
+var a;
+function playlistTransition(){
+  let liste = document.getElementById('liste');
+  let bartri = document.getElementById('bartri');
+  a=bartri;
+  // console.log(bartri.offsetHeight.toString());
+  liste.style.height = bartri.offsetHeight.toString()+"px";
+  // liste.style.height = "0";
+  setTimeout(function(){
+    liste.style.height = "100%"},800);
+
 }

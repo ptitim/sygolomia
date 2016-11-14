@@ -17,6 +17,9 @@ $couleurSecondaire : #b3555a;
   text-decoration: none;
   font-family: sans-serif;
 }
+body{
+  background-color: rgb(230, 230, 230);
+}
 
 a{
   text-decoration: none;
@@ -151,7 +154,7 @@ a{
   }
 
   .playing{
-    background-color: #82B7B4;
+    background-color: #8fb1d4;
   }
   #listePrincipal{
     order: 3;
@@ -163,13 +166,18 @@ a{
     display: flex;
     flex-direction: column;
     overflow-y: hidden;
+    height: 100%;
+    transition: all 0.4s cubic-bezier(.39,.58,.57,1);
   }
 
-  #barTri{
-    position: absolute;
-    text-align: left;
-    max-width: 70vmax;
-  }
+
+  // #bartri{
+  //   position: absolute;
+  //   text-align: left;
+  //   width: 90vmax;
+  //   margin-bottom: 1em;
+  //   background-color: rgb(181, 181, 181);
+  // }
 
   .bartri{
     @include listeMus();
@@ -182,7 +190,7 @@ a{
     background-color: rgb(224, 221, 221);
   }
   #selected{
-    background-color: rgba(60, 254, 195, 0.63);
+    background-color: rgba(60, 190, 254, 0.63);
   }
 // end musique
 
@@ -220,7 +228,7 @@ a{
       text-align: center;
       justify-content: center;
       transition: all 0.3s ease-out;
-      background-color: #dedede;
+      background-color: #fffbfb;
       border-radius: 25%;
       width: 15vmax;
       max-height: 3vmin;
@@ -309,7 +317,7 @@ a{
         padding: 1vmin 2vmax;
         transition: all 0.4s linear;
         &:hover{
-          background-color: rgba(101, 175, 252, 0.43);
+          background-color: rgba(101, 175, 252, 0.75);
         }
       }
       .selectedPlaylist{

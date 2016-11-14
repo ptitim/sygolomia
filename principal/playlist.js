@@ -269,6 +269,7 @@ function backHome(event){
     currentPlaylist.htmlele = "";
     currentPlaylist.idPlaylist = "";
     currentPlaylist.playlistName = "";
+
     for (var i = 0; i < playlists.tabPlaylists.length; i++) {
       let tmp = playlists.tabPlaylists[i].htmlele.className;
       playlists.tabPlaylists[i].htmlele.className = tmp.replace(" selectedPlaylist","");
@@ -277,9 +278,15 @@ function backHome(event){
     var ancient = document.getElementById('listePrincipal');
     var newOne = ancient.cloneNode(false);
     var parent = ancient.parentElement;
-    parent.removeChild(ancient);
-    newOne = createListe(newOne);
-    parent.appendChild(newOne);
+    setTimeout(function(){
+      parent.removeChild(ancient);
+    },300);
+    playlistTransition();
+
+    setTimeout(function(){
+      newOne = createListe(newOne);
+      parent.appendChild(newOne)
+    },800);
 }
 
 function handlePlaylist(e){
@@ -293,8 +300,11 @@ function handlePlaylist(e){
 
   });
   let liste = document.getElementById('listePrincipal');
-  liste.parentElement.removeChild(liste);
   aficheTabmus(playlistMus);
+
+  setTimeout(function(){
+    liste.parentElement.removeChild(liste);
+  },200);
   playlists.afficheBackButton();
 }
 
