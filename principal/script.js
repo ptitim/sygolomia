@@ -335,6 +335,7 @@ class Player{
     this.container.appendChild(this.nexts);
     this.container.appendChild(this.previouss);
     this.container.appendChild(this.afficheur);
+    this.container.appendChild(this.displayResearch());
     return this;
   }
   setSource(source){
@@ -371,6 +372,23 @@ class Player{
     this.titre.innerText = currentPlay.titre;
     this.album.innerText = currentPlay.album;
   }
+  displayResearch(){
+    this.containerResearch = createDiv('containerResearch');
+    this.textResearch = createDiv ('textResearch','itemResearch','Rechercher :');
+    this.inputResearch = document.createElement('input');
+    this.inputResearch.id = 'inputResearch';
+    this.inputResearch.className = 'itemResearch';
+    this.inputResearch.type = "text";
+
+    this.inputResearch.addEventListener('focusin',removeEventListenerKeybord);
+    this.inputResearch.addEventListener('focusout',addEventListenerKeybord);
+    this.inputResearch.addEventListener('keyup',research);
+
+    this.containerResearch.appendChild(this.textResearch);
+    this.containerResearch.appendChild(this.inputResearch);
+    return this.containerResearch;
+
+  }
 }
 
 //
@@ -380,6 +398,15 @@ class Player{
 //
 // event listerner function
 //
+function research(event){
+  let textResearch = document.getElementById('inputResearch').value;
+  ajax('POST','research.php',handleResearch,'text='+textResearch);
+}
+
+function handleResearch(){
+  console.log("reponse Recherche :",this.responseText);
+}
+
 function playThis(event){
   var reset = document.getElementsByClassName('playing');
   if(reset != [] && reset != undefined);
@@ -515,19 +542,7 @@ function aficheTabmus(tab){
 
 }
 
-//
-// FIN des event listener
-//
-
-//
-// Gestion des ecoute clavier sur la fenetre
-//
-function removeEventListenerKeybord(){
-  window.removeEventListener('keypress',changeSongKeybord);
-}
-function addEventListenerKeybord(){
-  window.addEventListener('keypress',changeSongKeybord);
-}
+//drag function
 
 function dragoverPlaylist(event){
   event.preventDefault();
@@ -575,16 +590,27 @@ function dragdropPlaylist(event){
   let tmp = "idPlaylist="+this.dataset.idPlaylist+"&name="+this.dataset.namePlaylist+"&idTrack="+currentSelection.idTrack;
   ajax('POST','import.php?addTo=true',handleResponseAddTo,tmp);
 }
+// end of drag function
+//
+// FIN des event listener
+//
 
-var a;
+//
+// Gestion des ecoute clavier sur la fenetre
+//
+function removeEventListenerKeybord(){
+  window.removeEventListener('keypress',changeSongKeybord);
+}
+function addEventListenerKeybord(){
+  window.addEventListener('keypress',changeSongKeybord);
+}
+
+
+
 function playlistTransition(){
   let liste = document.getElementById('liste');
   let bartri = document.getElementById('bartri');
-  a=bartri;
-  // console.log(bartri.offsetHeight.toString());
   liste.style.height = bartri.offsetHeight.toString()+"px";
-  // liste.style.height = "0";
   setTimeout(function(){
-    liste.style.height = "100%"},800);
-
+    liste.style.height = "100%"},600);
 }

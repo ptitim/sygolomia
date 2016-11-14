@@ -1,6 +1,8 @@
 $tailleCase: 18vmax;
 $couleurPrincipal : rgb(58, 77, 144);
 $couleurSecondaire : #b3555a;
+$selected : rgba(60, 190, 254, 0.63);
+$hoverItems : rgba(103, 93, 181, 0.53);
 
 
 @mixin listeMus {
@@ -146,7 +148,7 @@ a{
     align-items: center;
     border: 2px ridge rgba(152, 66, 66, 0.65);
     &:hover{
-      background-color: rgba(103, 93, 181, 0.53);
+      background-color: $hoverItems;
     }
   }
   .titre{
@@ -167,9 +169,8 @@ a{
     flex-direction: column;
     overflow-y: hidden;
     height: 100%;
-    transition: all 0.4s cubic-bezier(.39,.58,.57,1);
+    transition: all 0.2s ease-in;
   }
-
 
   // #bartri{
   //   position: absolute;
@@ -190,7 +191,7 @@ a{
     background-color: rgb(224, 221, 221);
   }
   #selected{
-    background-color: rgba(60, 190, 254, 0.63);
+    background-color: $selected;
   }
 // end musique
 
@@ -212,7 +213,7 @@ a{
   #containerAudio{
     z-index: 1;
     order: 1;
-    min-height: 15vmin;
+    min-height: 18vmin;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -261,6 +262,11 @@ a{
     }
     #afgSpanTitre,#afgSpanAlbum{
       border-bottom: 0.4vmin dotted rgba(0, 0, 0, 0.39);
+    }
+    #containerResearch{
+      order: 6;
+      display: flex;
+      flex-direction: row;
     }
 // end lecteur
 
@@ -317,11 +323,11 @@ a{
         padding: 1vmin 2vmax;
         transition: all 0.4s linear;
         &:hover{
-          background-color: rgba(101, 175, 252, 0.75);
+          background-color: $hoverItems;
         }
       }
       .selectedPlaylist{
-        background-color: rgba(50, 127, 184, 0.63);
+        background-color: $selected;
       }
 // end menu playlist
 
@@ -339,7 +345,7 @@ a{
   padding: 5% 5%;
   border-bottom: 2px solid white;
   &:hover{
-    background-color: $couleurSecondaire;
+    background-color: $selected;
   }
 }
 #containerPlaylistCT{
@@ -356,7 +362,7 @@ a{
     padding-bottom: 0.4vmax;
     padding-top: 0.4vmax;
     &:hover{
-      background-color: rgb(0, 240, 224);
+      background-color: $selected;
     }
   }
 }

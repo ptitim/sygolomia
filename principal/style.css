@@ -128,7 +128,7 @@ a {
   flex-direction: column;
   overflow-y: hidden;
   height: 100%;
-  transition: all 0.4s cubic-bezier(0.39, 0.58, 0.57, 1); }
+  transition: all 0.2s ease-in; }
 
 .bartri {
   min-width: 20vmax;
@@ -157,7 +157,7 @@ thead {
 #containerAudio {
   z-index: 1;
   order: 1;
-  min-height: 15vmin;
+  min-height: 18vmin;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -203,6 +203,11 @@ thead {
 
 #afgSpanTitre, #afgSpanAlbum {
   border-bottom: 0.4vmin dotted rgba(0, 0, 0, 0.39); }
+
+#containerResearch {
+  order: 6;
+  display: flex;
+  flex-direction: row; }
 
 #playlistContainer {
   order: 1;
@@ -250,10 +255,10 @@ thead {
   padding: 1vmin 2vmax;
   transition: all 0.4s linear; }
   .playlist:hover {
-    background-color: rgba(101, 175, 252, 0.75); }
+    background-color: rgba(103, 93, 181, 0.53); }
 
 .selectedPlaylist {
-  background-color: rgba(50, 127, 184, 0.63); }
+  background-color: rgba(60, 190, 254, 0.63); }
 
 #containerCT {
   position: absolute;
@@ -265,7 +270,7 @@ thead {
   padding: 5% 5%;
   border-bottom: 2px solid white; }
   .itemCT:hover {
-    background-color: #b3555a; }
+    background-color: rgba(60, 190, 254, 0.63); }
 
 #containerPlaylistCT {
   margin-left: 13vmax;
@@ -281,7 +286,7 @@ thead {
     padding-bottom: 0.4vmax;
     padding-top: 0.4vmax; }
     #containerPlaylistCT > .playlist:hover {
-      background-color: #00f0e0; }
+      background-color: rgba(60, 190, 254, 0.63); }
 
 #formContainer {
   background-color: white;

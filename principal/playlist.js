@@ -281,12 +281,12 @@ function backHome(event){
     playlistTransition();
     setTimeout(function(){
       parent.removeChild(ancient);
-    },400);
+    },200);
 
     setTimeout(function(){
       newOne = createListe(newOne);
       parent.appendChild(newOne)
-    },800);
+    },500);
 }
 
 function handlePlaylist(e){
