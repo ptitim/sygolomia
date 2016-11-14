@@ -118,7 +118,6 @@ function createListe(listePrincipal){
     ligne.addEventListener('dblclick',playThis);
     ligne.addEventListener('contextmenu',diplayContextMenuTrack);
 
-    ligne.addEventListener('drag',dragTrack);
     ligne.addEventListener('dragstart',dragStartTrack);
     ligne.addEventListener('dragend',dragEndTrack);
 
@@ -526,30 +525,13 @@ function addEventListenerKeybord(){
   window.addEventListener('keypress',changeSongKeybord);
 }
 
-
-var a;
-function dragTrack(event){
-  // event.preventDefault();
-
-  // a=event;
-  // console.log("drag : ",event);
-}
-
-var b;
 function dragoverPlaylist(event){
   event.preventDefault();
-
-  // b=event;
-  // console.log("over : ",event);
-
-  // let tmp = "idPlaylist="+this.dataset.idPlaylist+"&name="+this.dataset.namePlaylist+"&idTrack="+currentSelection.idTrack;
-  // ajax('POST','import.php?addTo=true',handleResponseAddTo,tmp);
 }
 
 function dragStartTrack(event){
   // event.preventDefault();
 
-  console.log("start drag of : ",this);
   currentSelection.idTrack = this.dataset.idTrack;
   currentSelection.chemin = this.dataset.chemin;
   currentSelection.htmlele = this;
@@ -559,19 +541,12 @@ function dragStartTrack(event){
 }
 function dragEndTrack(event){
   event.preventDefault();
-  console.log("end drag of : ",this);
-  console.log(currentPlaylistSelected);
   currentSelection.htmlele.id = currentSelection.htmlele.id.replace("selected","");
-  if(currentPlaylistSelected.htmlele != ""){
-    console.log("bonjour");
-  }
 }
 
 function dragenterPlaylist(event){
   event.preventDefault();
 
-  console.log("enter : ",this);
-  // this.style.border = "2px dotted rgb(140, 230, 11)";
   this.className += " selectedPlaylist";
   currentPlaylistSelected.htmlele = this;
   currentPlaylistSelected.idPlaylist = this.dataset.idPlaylist;
@@ -581,7 +556,6 @@ function dragenterPlaylist(event){
 function dragleavePlaylist(event){
   event.preventDefault();
 
-  console.log("leave : ",this);
   this.style.border = "";
 
   this.className = this.className.replace("selectedPlaylist","");
@@ -592,10 +566,8 @@ function dragleavePlaylist(event){
 
 function dragdropPlaylist(event){
   event.preventDefault();
-  currentPlaylistSelected.htmlele.className = currentPlaylistSelected.htmlele.className.replace('selectedPlaylist','');
+  this.className = this.className.replace('selectedPlaylist','');
 
-  console.log("drop : ",this);
-  // let data = event.dataTransfer.getData('selection');
   let tmp = "idPlaylist="+this.dataset.idPlaylist+"&name="+this.dataset.namePlaylist+"&idTrack="+currentSelection.idTrack;
   ajax('POST','import.php?addTo=true',handleResponseAddTo,tmp);
 }
