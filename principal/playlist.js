@@ -278,10 +278,10 @@ function backHome(event){
     var ancient = document.getElementById('listePrincipal');
     var newOne = ancient.cloneNode(false);
     var parent = ancient.parentElement;
+    playlistTransition();
     setTimeout(function(){
       parent.removeChild(ancient);
-    },300);
-    playlistTransition();
+    },400);
 
     setTimeout(function(){
       newOne = createListe(newOne);
