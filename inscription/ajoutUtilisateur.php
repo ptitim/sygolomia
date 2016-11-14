@@ -7,7 +7,7 @@ if(isset($_POST['pseudo']) && isset($_POST['email']) && isset($_POST['password1'
   $pass1 = $_POST['password1'];
   $pass2 = $_POST['password2'];
 }
-if($pass1 !== $pass2 OR strlen($pseudo) > 4 OR preg_match('/(.{4,})(=?@.+)(\..+)/',$mail) != 1){
+if($pass1 !== $pass2 OR strlen($pseudo) < 4 OR preg_match('/(.{4,})(=?@.+)(\..+)/',$mail) != 1){
   header("inscription.php?erreur=true");
   echo "Erreur, veuillez reesayer <br/>";
   echo "<a href='inscription.php'>retour acceuil</a>";
