@@ -3,17 +3,18 @@ session_start();
 require_once("../config.php");
 require_once("../fonctionPhp.php");
 
-require_once('../../getid3/getid3.php');
-require_once('../../getid3/getid3.lib.php');
-// import module audio
-require_once('../../getid3/module.audio.mp3.php');
-require_once('../../getid3/module.audio.ogg.php');
-require_once('../../getid3/module.audio.flac.php');
-require_once('../../getid3/module.audio.midi.php');
-require_once('../../getid3/module.audio.wavpack.php');
-// import module video
-require_once('../../getid3/module.audio-video.flv.php');
-require_once('../../getid3/module.audio-video.mpeg.php');
+// import de la librairie id3 pour la lecture des metadonnees
+  require_once('../../getid3/getid3.php');
+  require_once('../../getid3/getid3.lib.php');
+  // import module audio
+  require_once('../../getid3/module.audio.mp3.php');
+  require_once('../../getid3/module.audio.ogg.php');
+  require_once('../../getid3/module.audio.flac.php');
+  require_once('../../getid3/module.audio.midi.php');
+  require_once('../../getid3/module.audio.wavpack.php');
+  // import module video
+  require_once('../../getid3/module.audio-video.flv.php');
+  require_once('../../getid3/module.audio-video.mpeg.php');
 
 // var_dump($_GET);
 if(isset($_GET['maj']) AND $_GET['maj'] === "true"){
