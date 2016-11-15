@@ -41,22 +41,32 @@ if(isset($_POST['fileType']) && $_POST['fileType'] === "musique"){
 
     $fileInfo = $getID3->analyze($filetmp_name);
     $cheminTransfert = genereChemin($filetmp_name,$fileName, $type,$fileInfo);
+    $test = $bdd->prepare('SELECT id FROM musique WHERE chemin=:chemin');
+    $test->bindParam('chemin',$cheminTransfert,PDO::PARAM_STR);
+    $test->execute();
+    echo $cheminTransfert."<br/>";
 
-    $meta = getMeta($fileInfo,$fileName,$type,$cheminTransfert);
-    $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type,chemin) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type,:chemin)');
 
-    echo "chemin ".$cheminTransfert;
-    $resultat = move_uploaded_file($_FILES['upload']['tmp_name'], $cheminTransfert);
+    if($test != false){
+      $meta = getMeta($fileInfo,$fileName,$type,$cheminTransfert);
+      $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type,chemin) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type,:chemin)');
 
-    if($resultat){
-      $upload->execute($meta);
-      majJson($bdd);
+      $resultat = move_uploaded_file($_FILES['upload']['tmp_name'], $cheminTransfert);
+
+      if($resultat){
+        $upload->execute($meta);
+        majJson($bdd);
+        echo "<br/>";
+        echo "fichier importer";
+      }else{
+        echo "Erreur lors de l'upload";
+      }
+      // header("Refresh:5;URL=index.php");
+    }else {
       echo "<br/>";
-      echo "fichier importer";
-    }else{
-      echo "Erreur lors de l'upload";
+      echo "le fichier existe deja";
     }
-    // header("Refresh:5;URL=index.php");
+
     echo "<br/><a href='index.php'>retour</a>";
   }else
     echo $fileError;
@@ -72,6 +82,10 @@ if(isset($_POST['fileType']) && $_POST['fileType'] == "musiques"){
 
       $cheminTransfert = genereChemin($filetmp_name,$fileName, $type,$fileInfo);
       echo $cheminTransfert."<br/>";
+
+      $test = $bdd->prepare('SELECT id FROM musique WHERE chemin=:chemin');
+      $test->bindParam('chemin',$cheminTransfert,PDO::PARAM_STR);
+      $test->execute();
 
       $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type,chemin) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type,:chemin)');
       $resultat = move_uploaded_file($filetmp_name, $cheminTransfert);
@@ -137,6 +151,14 @@ function getMeta($fileInfo,$fileName,$type,$chemin){
       $duree = isset($fileInfo['playtime_seconds']) ? $fileInfo['playtime_seconds'] : "0";
       $genre = isset($fileInfo['tags_html']['id3v2']['genre'][0]) ? $fileInfo['tags_html']['id3v2']['genre'][0] : "" ;
       $titre = isset($fileInfo['tags_html']['id3v2']['title'][0]) ? $fileInfo['tags_html']['id3v2']['title'][0] : $fileName;
+      $titre = htmlspecialchars_decode($titre,ENT_DISALLOWED);
+      $album = htmlspecialchars_decode($album,ENT_DISALLOWED);
+      $artist= htmlspecialchars_decode($artist,ENT_DISALLOWED);
+      // $re = '/([a-zA-Z]+|\d+)/';
+      // preg_match_all($re, $titre, $matches);
+      // var_dump($matches);
+      // $titre = join(" ",$matches[0]);
+      echo "<br/> titre :".$titre."<br/>";
       return [
               'titre' => $titre,
               'album' => $album,
