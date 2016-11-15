@@ -335,7 +335,7 @@ class Player{
     this.container.appendChild(this.nexts);
     this.container.appendChild(this.previouss);
     this.container.appendChild(this.afficheur);
-    this.container.appendChild(this.displayResearch());
+    // this.container.appendChild(this.displayResearch());
     return this;
   }
   setSource(source){
