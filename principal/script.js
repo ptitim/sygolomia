@@ -510,8 +510,16 @@ var currentSelection = {
   chemin : "",
   htmlele: ""
 }
-
+var a;
 function addTo(event){
+  a=this;
+  let idP = this.dataset.namePlaylist;
+  var htmlele = document.getElementById(idP);
+
+  htmlele.className += " selectedPlaylist";
+  setTimeout(function(){
+    htmlele.className = htmlele.className.replace(" selectedPlaylist","");
+  }, 800);
   let tmp = "idPlaylist="+this.dataset.idPlaylist+"&name="+this.dataset.namePlaylist+"&idTrack="+currentSelection.idTrack;
   ajax('POST','import.php?addTo=true',handleResponseAddTo,tmp);
 }

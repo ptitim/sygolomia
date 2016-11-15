@@ -109,6 +109,13 @@ class Playlist{
     this.htmlele.dataset.namePlaylist = nom;
     this.htmlele.className = "playlist";
     this.htmlele.innerText = nom;
+    this.htmlele.addEventListener('click',displayPlaylist);
+
+    this.htmlele.addEventListener('contextmenu',contextMenuPlaylist);
+    this.htmlele.addEventListener('dragover',dragoverPlaylist);
+    this.htmlele.addEventListener('dragenter',dragenterPlaylist);
+    this.htmlele.addEventListener('dragleave',dragleavePlaylist);
+    this.htmlele.addEventListener('drop',dragdropPlaylist);
   }
   createHtmlEle(playlists){
     playlists.container.appendChild(this.htmlele);
