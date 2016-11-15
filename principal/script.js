@@ -72,8 +72,6 @@ function init(mode){
    ctm = new ContextMenuMusique();
    ctp = new ContextMenuPlaylist();
    window.addEventListener('click',link);
-  //  document.addEventListener('drop',dragdropPlaylist);
-  //  document.addEventListener('drag',function(event){console.log('draaaaag')});
     // afficheAcceuil();
 }
 
@@ -137,7 +135,6 @@ function loadVideo(){
 }
 
 function affichePlaylist(){
-  let index = 0;
   for(let i = 0; i < playlistData.length; i++){
     let temp = new Playlist(playlistData[i].nom, playlistData[i].idPlaylist);
     playlists.tabPlaylists.push(temp);
@@ -150,6 +147,7 @@ function affichePlaylist(){
     temp.htmlele.addEventListener('dragleave',dragleavePlaylist);
     temp.htmlele.addEventListener('drop',dragdropPlaylist);
   }
+  playlists.playlistCounter = playlistData[playlistData.length -1].idPlaylist;
 }
 
 

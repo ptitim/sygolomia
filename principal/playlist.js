@@ -1,7 +1,7 @@
 class Playlists{
   constructor(){
     this.container = this.containerPlaylist();
-    this.buttonAddPlaylist = createDiv('addPlaylist','playlistButton','add');
+    this.buttonAddPlaylist = createDiv('addPlaylist','playlistButton','add Playlist');
     this.buttonAddPlaylist.addEventListener('click',this.createPlaylist.bind(this));
     this.container.appendChild(this.buttonAddPlaylist);
     this.tabPlaylists = [];
@@ -21,7 +21,6 @@ class Playlists{
     ele.appendChild(this.container);
   }
   createPlaylist(){
-    console.log("make your playlist");
     this.afgFormulaire();
     this.playlistCounter++;
   }
@@ -60,9 +59,10 @@ class Playlists{
     this.inputName.focus();
   }
   submit(event){
-      console.log(event);
-      // a = this.inputName.value;
-      if((event.type == "click" || (event.type == 'keyup' && event.key == "Enter" )) && this.inputName.value != ""){
+      var regex = /^([a-zA-Z]|\d)+$/g;
+      console.log("regex : ",regex.test(this.inputName.value));
+      // console.log(this.inputName.value);
+      if((event.type == "click" || (event.type == 'keyup' && event.key == "Enter" )) && regex.test(this.inputName.value) == true ){
         let input = document.getElementById('inputName');
         let name = input.value;
         let tmp = new Playlist(name,this.playlistCounter);
@@ -73,13 +73,9 @@ class Playlists{
 
         let dataplaylist = JSON.stringify(this);
         ajax('POST','import.php?playlist=true',function(){},dataplaylist);
-        // console.log("data : "+data);
-        // let xhr = new XMLHttpRequest();
-        // xhr.open('POST','import.php?playlist=true');
-        // xhr.onloadend =
-        // xhr.send(dataplaylist);
-    }else if ((event.type == "click" || (event.type == 'keyup' && event.key == "Enter" )) && this.inputName.value == "") {
-        this.inputName.style.backgroundColor = "rgba(228, 103, 103, 1)";
+    }else if ((event.type == "click" || (event.type == 'keyup' && event.key == "Enter" )) && regex.test(this.inputName.value) == false) {
+        console.log("bonjour");
+        this.inputName.style.backgroundColor = "rgba(228, 103, 103,1)";
         setTimeout(function(){this.inputName.style.backgroundColor = "white"}.bind(this),600);
     }else if (event.type == 'keyup' && event.key == "Escape") {
         this.cancel();
@@ -219,12 +215,12 @@ class ContextMenuPlaylist extends ContextMenu{
       this.container.appendChild(this.delete);
   }
   deletePlaylist(event){
-    let _this = currentPlaylist.htmlele;
+    let _this = currentPlaylistSelected.htmlele;
+    console.log("this",_this);
     if (confirm("Etes vous sure ?")) {
-      console.log("ye suis la");
-      ajax('POST','import.php?deletePlaylist=true',function(){},'idPlaylist='+currentPlaylist.idPlaylist);
+      ajax('POST','import.php?deletePlaylist=true',function(){},'idPlaylist='+currentPlaylistSelected.idPlaylist);
       _this.parentElement.removeChild(_this);
-      if(_this == currentPlaylist.htmlele){
+      if(_this == currentPlaylistSelected.htmlele){
         backHome();
       }
     }
@@ -267,12 +263,13 @@ function contextMenuPlaylist(event){
   currentPlaylistSelected.playlistName = this.dataset.namePlaylist;
   currentPlaylistSelected.htmlele = this;
   ctp.displayIt(event.clientX,event.clientY);
+  console.log(currentPlaylistSelected);
 
 }
 
 //hide back button
 function backHome(event){
-    this.style.maxHeight = "0";
+  document.getElementById('buttonBack').style.maxHeight = "0";
     currentPlaylist.htmlele = "";
     currentPlaylist.idPlaylist = "";
     currentPlaylist.playlistName = "";
