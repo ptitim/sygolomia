@@ -1,5 +1,6 @@
 <?php
 session_start();
+header('Content-Type: text/html; charset=utf-8');
 require_once("../config.php");
 require_once("../fonctionPhp.php");
 
@@ -43,28 +44,33 @@ if(isset($_POST['fileType']) && $_POST['fileType'] === "musique"){
     $cheminTransfert = genereChemin($filetmp_name,$fileName, $type,$fileInfo);
     $test = $bdd->prepare('SELECT id FROM musique WHERE chemin=:chemin');
     $test->bindParam('chemin',$cheminTransfert,PDO::PARAM_STR);
-    $test->execute();
+    $res = $test->execute();
     echo $cheminTransfert."<br/>";
+    var_dump($res);
+    echo "<br/>";
 
+    if($res){
+      $donnee = $test->fetch();
+      var_dump(count($donnee));
+      if(count($donnee) <= 1){
+        $meta = getMeta($fileInfo,$fileName,$type,$cheminTransfert);
+        $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type,chemin) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type,:chemin)');
 
-    if($test != false){
-      $meta = getMeta($fileInfo,$fileName,$type,$cheminTransfert);
-      $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type,chemin) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type,:chemin)');
+        $resultat = move_uploaded_file($_FILES['upload']['tmp_name'], $cheminTransfert);
 
-      $resultat = move_uploaded_file($_FILES['upload']['tmp_name'], $cheminTransfert);
-
-      if($resultat){
-        $upload->execute($meta);
-        majJson($bdd);
+        if($resultat){
+          $upload->execute($meta);
+          majJson($bdd);
+          echo "<br/>";
+          echo "fichier importer";
+        }else{
+          echo "Erreur lors de l'upload";
+        }
+        // header("Refresh:5;URL=index.php");
+      }else {
         echo "<br/>";
-        echo "fichier importer";
-      }else{
-        echo "Erreur lors de l'upload";
+        echo "le fichier existe deja";
       }
-      // header("Refresh:5;URL=index.php");
-    }else {
-      echo "<br/>";
-      echo "le fichier existe deja";
     }
 
     echo "<br/><a href='index.php'>retour</a>";
@@ -85,21 +91,31 @@ if(isset($_POST['fileType']) && $_POST['fileType'] == "musiques"){
 
       $test = $bdd->prepare('SELECT id FROM musique WHERE chemin=:chemin');
       $test->bindParam('chemin',$cheminTransfert,PDO::PARAM_STR);
-      $test->execute();
+      $res = $test->execute();
 
-      $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type,chemin) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type,:chemin)');
-      $resultat = move_uploaded_file($filetmp_name, $cheminTransfert);
+      if($res){
+        $donnee = $test->fetch();
+        var_dump(count($donnee));
+        if(count($donnee)<=1){
+          $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type,chemin) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type,:chemin)');
+          $resultat = move_uploaded_file($filetmp_name, $cheminTransfert);
 
-      $meta = getMeta($fileInfo,$fileName,$type,$cheminTransfert);
+          $meta = getMeta($fileInfo,$fileName,$type,$cheminTransfert);
 
-      if($resultat){
-        $upload->execute($meta);
-        echo "<br/>";
-        echo "fichier importer";
-      }else{
-        echo "Erreur lors de l'upload";
+          if($resultat){
+            $upload->execute($meta);
+            echo "<br/>";
+            echo "fichier importer";
+          }else{
+            echo "Erreur lors de l'upload";
+          }
+          majJson($bdd);
+        }else {
+          echo "<br/>";
+          echo "le fichier existe deja";
+        }
+
       }
-      majJson($bdd);
     }
 
   }else {
@@ -158,7 +174,9 @@ function getMeta($fileInfo,$fileName,$type,$chemin){
       // preg_match_all($re, $titre, $matches);
       // var_dump($matches);
       // $titre = join(" ",$matches[0]);
+      $titre = mb_convert_encoding($titre,'UTF-8');
       echo "<br/> titre :".$titre."<br/>";
+      var_dump(mb_detect_encoding($titre,"auto"));
       return [
               'titre' => $titre,
               'album' => $album,

@@ -5,6 +5,7 @@ define("AUTRES", "autres");
 try
 {
   $bdd = new PDO("mysql:host=localhost;dbname=serveurMedia;charset=utf8", 'root', '');
+  $bdd->exec("set names utf8");
 }
 catch (Exception $e)
 {

@@ -60,8 +60,6 @@ class Playlists{
   }
   submit(event){
       var regex = /^([a-zA-Z]|\d)+$/g;
-      console.log("regex : ",regex.test(this.inputName.value));
-      // console.log(this.inputName.value);
       if((event.type == "click" || (event.type == 'keyup' && event.key == "Enter" )) && regex.test(this.inputName.value) == true ){
         let input = document.getElementById('inputName');
         let name = input.value;
@@ -84,7 +82,6 @@ class Playlists{
   cancel(){
     document.body.removeChild(this.divPrinc);
     addEventListenerKeybord();
-
   }
   afficheBackButton(data){
     if(!this.backButtonDisplayed){
@@ -141,7 +138,6 @@ function displayPlaylist(event){
 //   }
 // }
 
-
 class ContextMenu{
   constructor(){
     this.container = createDiv('containerCT','contextMenu');
@@ -152,10 +148,18 @@ class ContextMenu{
   }
   displayIt(x,y){
     this.container.style.pointerEvents = "all";
-    this.container.style.left = x+"px";
-    this.container.style.top = y+"px";
     this.container.style.display = "block";
     this.displayed = true;
+    if(y > document.body.offsetHeight - this.container.offsetHeight){
+      this.container.style.top = (y-this.container.offsetHeight+20)+"px";
+    }else {
+      this.container.style.top = y+"px";
+    }
+    if (x > document.body.offsetWidth - this.container.offsetWidth) {
+      this.container.style.left = (x-this.container.offsetWidth)+"px";
+    }else {
+      this.container.style.left = x+"px";
+    }
   }
   hide(){
     if(this.displayed){
@@ -180,6 +184,7 @@ class ContextMenuMusique extends ContextMenu{
     this.containerPlaylist.style.flexDirection = "column";
     this.containerPlaylist.addEventListener('mouseenter',this.showPlaylist.bind(this));
     this.containerPlaylist.addEventListener('mouseleave',this.hidePlaylist.bind(this));
+    a = this.containerPlaylist;
 
     // this.container.appendChild(this.play);
     this.container.appendChild(this.containerPlaylist);
@@ -191,7 +196,6 @@ class ContextMenuMusique extends ContextMenu{
         let tmp = ele.htmlele.cloneNode(true);
         tmp.addEventListener('click',addTo);
         this.containerPlaylist.appendChild(tmp);
-
       }
       else
         console.log('received object is invalid : missing property htmlele');
@@ -202,6 +206,7 @@ class ContextMenuMusique extends ContextMenu{
     this.containerPlaylist.style.display = "flex";
   }
   hidePlaylist(){
+    this.containerPlaylist.style.marginBottom = "0";
     this.containerPlaylist.style.display = "none";
   }
 }

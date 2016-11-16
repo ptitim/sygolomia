@@ -1,3 +1,6 @@
+// varibles de devellopement
+var activResearch = true;
+
 //
 // Variable Globales
 //
@@ -333,7 +336,8 @@ class Player{
     this.container.appendChild(this.nexts);
     this.container.appendChild(this.previouss);
     this.container.appendChild(this.afficheur);
-    // this.container.appendChild(this.displayResearch());
+    if(activResearch == true)
+      this.container.appendChild(this.displayResearch());
     return this;
   }
   setSource(source){
@@ -378,8 +382,8 @@ class Player{
     this.inputResearch.className = 'itemResearch';
     this.inputResearch.type = "text";
 
-    this.inputResearch.addEventListener('focusin',removeEventListenerKeybord);
-    this.inputResearch.addEventListener('focusout',addEventListenerKeybord);
+    this.inputResearch.addEventListener('focus',removeEventListenerKeybord);
+    this.inputResearch.addEventListener('blur',addEventListenerKeybord);
     this.inputResearch.addEventListener('keyup',research);
 
     this.containerResearch.appendChild(this.textResearch);
@@ -396,13 +400,36 @@ class Player{
 //
 // event listerner function
 //
+var timeoutStock;
 function research(event){
-  let textResearch = document.getElementById('inputResearch').value;
-  ajax('POST','research.php',handleResearch,'text='+textResearch);
+  window.clearTimeout(timeoutStock);
+  timeoutStock = window.setTimeout(testTruc,400);
 }
 
+function testTruc(){
+  let textResearch = document.getElementById('inputResearch').value;
+  if (textResearch == ""){
+    backHome();
+  }else {
+    ajax('POST','research.php',handleResearch,'text='+textResearch);
+  }
+}
+
+
 function handleResearch(){
-  console.log("reponse Recherche :",this.responseText);
+  let response = JSON.parse(this.responseText);
+  let playlistMus = data.filter(function(obj){
+    for (var i = 0; i < response.length; i++) {
+      if(obj['id'] == response[i]['id']){
+        return obj;
+      }
+    }
+
+  });
+  let liste = document.getElementById('listePrincipal');
+  aficheTabmus(playlistMus);
+  liste.parentElement.removeChild(liste);
+  playlists.afficheBackButton();
 }
 
 function playThis(event){
@@ -598,20 +625,6 @@ function dragdropPlaylist(event){
 }
 // end of drag function
 //
-// FIN des event listener
-//
-
-//
-// Gestion des ecoute clavier sur la fenetre
-//
-function removeEventListenerKeybord(){
-  window.removeEventListener('keypress',changeSongKeybord);
-}
-function addEventListenerKeybord(){
-  window.addEventListener('keypress',changeSongKeybord);
-}
-
-
 
 function playlistTransition(){
   let liste = document.getElementById('liste');
@@ -619,4 +632,18 @@ function playlistTransition(){
   liste.style.height = bartri.offsetHeight.toString()+"px";
   setTimeout(function(){
     liste.style.height = "100%"},600);
+}
+// FIN des event listener
+//
+
+//
+// Gestion des ecoute clavier sur la fenetre
+//
+function removeEventListenerKeybord(){
+  console.log('remove keyListener');
+  window.removeEventListener('keypress',changeSongKeybord);
+}
+function addEventListenerKeybord(){
+  console.log('add keyListener');
+  window.addEventListener('keypress',changeSongKeybord);
 }
