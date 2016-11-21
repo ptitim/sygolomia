@@ -64,7 +64,11 @@ class Playlists{
         let input = document.getElementById('inputName');
         let name = input.value;
         let tmp = new Playlist(name,this.playlistCounter);
-        tmp.htmlele.style.order = this.tabPlaylists[this.tabPlaylists.length-1].htmlele.style.order + 1;
+        if(this.tabPlaylists.length > 0){
+          tmp.htmlele.style.order = this.tabPlaylists[this.tabPlaylists.length-1].htmlele.style.order + 1;
+        }else if (this.tabPlaylists.length == 0) {
+          tmp.htmlele.style.order = 1;
+        }
         this.tabPlaylists.push(tmp);
         this.cancel();
         this.container.appendChild(tmp.htmlele);
@@ -269,7 +273,6 @@ function contextMenuPlaylist(event){
   currentPlaylistSelected.htmlele = this;
   ctp.displayIt(event.clientX,event.clientY);
   console.log(currentPlaylistSelected);
-
 }
 
 //hide back button

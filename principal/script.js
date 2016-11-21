@@ -32,7 +32,7 @@ function loadData(url){
     xhr.onloadend = function(){data = JSON.parse(xhr.responseText); return data};
     xhr.open("GET",url,false);
     xhr.onerror = function(){console.log("Erreur requete xhtml")};
-    xhr.send(null);
+    xhr.send();
 }
 
 function loadPlaylist(url){
