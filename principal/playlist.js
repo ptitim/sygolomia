@@ -299,22 +299,26 @@ function backHome(event){
 }
 
 function handlePlaylist(e){
-  let response = JSON.parse(this.responseText);
-  let playlistMus = data.filter(function(obj){
-    for (var i = 0; i < response.length; i++) {
-      if(obj['id'] == response[i]['idMusique']){
-        return obj;
-      }
-    }
 
-  });
   let liste = document.getElementById('listePrincipal');
-  aficheTabmus(playlistMus);
+  if (liste != null && liste.parentElement != null) {
+    let response = JSON.parse(this.responseText);
+    let playlistMus = data.filter(function(obj){
+      for (var i = 0; i < response.length; i++) {
+        if(obj['id'] == response[i]['idMusique']){
+          return obj;
+        }
+      }
+    });
+    aficheTabmus(playlistMus);
 
-  setTimeout(function(){
-    liste.parentElement.removeChild(liste);
-  },200);
-  playlists.afficheBackButton();
+    setTimeout(function(){
+      if (liste != null && liste.parentElement != null) {
+        liste.parentElement.removeChild(liste);
+      }
+    },200);
+    playlists.afficheBackButton();
+  }
 }
 
 //
