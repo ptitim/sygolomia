@@ -5,17 +5,17 @@ require_once("../config.php");
 require_once("../fonctionPhp.php");
 
 // import de la librairie id3 pour la lecture des metadonnees
-  require_once('../../getid3/getid3.php');
-  require_once('../../getid3/getid3.lib.php');
+  require_once('../getid3/getid3.php');
+  require_once('../getid3/getid3.lib.php');
   // import module audio
-  require_once('../../getid3/module.audio.mp3.php');
-  require_once('../../getid3/module.audio.ogg.php');
-  require_once('../../getid3/module.audio.flac.php');
-  require_once('../../getid3/module.audio.midi.php');
-  require_once('../../getid3/module.audio.wavpack.php');
+  require_once('../getid3/module.audio.mp3.php');
+  require_once('../getid3/module.audio.ogg.php');
+  require_once('../getid3/module.audio.flac.php');
+  require_once('../getid3/module.audio.midi.php');
+  require_once('../getid3/module.audio.wavpack.php');
   // import module video
-  require_once('../../getid3/module.audio-video.flv.php');
-  require_once('../../getid3/module.audio-video.mpeg.php');
+  require_once('../getid3/module.audio-video.flv.php');
+  require_once('../getid3/module.audio-video.mpeg.php');
 
 // var_dump($_GET);
 if(isset($_GET['maj']) AND $_GET['maj'] === "true"){
@@ -128,7 +128,7 @@ if(isset($_POST['fileType']) && $_POST['fileType'] == "musiques"){
 
 // genere le chemin de transfert et vrée les dossier si inexistant
 function genereChemin($filetmp_dir,$fileName,$type,$fileInfo){
-  $chemin = "../../upload/";
+  $chemin = "../upload/";
 
   if(!is_dir($chemin))
     mkdir($chemin, 0777);
@@ -170,13 +170,7 @@ function getMeta($fileInfo,$fileName,$type,$chemin){
       $titre = htmlspecialchars_decode($titre,ENT_DISALLOWED);
       $album = htmlspecialchars_decode($album,ENT_DISALLOWED);
       $artist= htmlspecialchars_decode($artist,ENT_DISALLOWED);
-      // $re = '/([a-zA-Z]+|\d+)/';
-      // preg_match_all($re, $titre, $matches);
-      // var_dump($matches);
-      // $titre = join(" ",$matches[0]);
-      $titre = mb_convert_encoding($titre,'UTF-8');
-      echo "<br/> titre :".$titre."<br/>";
-      var_dump(mb_detect_encoding($titre,"auto"));
+
       return [
               'titre' => $titre,
               'album' => $album,

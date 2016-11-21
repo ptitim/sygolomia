@@ -1,5 +1,7 @@
 <?php
 session_start();
+$_SESSION['pseudo'] = "demo";
+
 if(!isset($_SESSION['pseudo'])){
   header("location: http://localhost/sygolomia/index.php");
 }
