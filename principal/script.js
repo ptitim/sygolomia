@@ -309,6 +309,8 @@ class Player{
     this.nexts.addEventListener("click",playnext);
     this.previouss = createDiv('previous','audioButton','previous');
     this.previouss.addEventListener('click',playprevious);
+    this.goto = createDiv('goto','audioButton',"go to played");
+    this.goto.addEventListener('click',this.gotoPlayed);
     // afficheur des information du titre jouer
     this.afficheur = createDiv('afficheur');
 
@@ -334,6 +336,7 @@ class Player{
     this.container = createDiv('containerAudio');
     this.container.appendChild(this.player);
     this.container.appendChild(this.nexts);
+    this.container.appendChild(this.goto);
     this.container.appendChild(this.previouss);
     this.container.appendChild(this.afficheur);
     if(activResearch == true)
@@ -389,7 +392,9 @@ class Player{
     this.containerResearch.appendChild(this.textResearch);
     this.containerResearch.appendChild(this.inputResearch);
     return this.containerResearch;
-
+  }
+  gotoPlayed(event){
+    currentPlay.htmlele.scrollIntoView(currentPlay.htmlele.parentElement);
   }
 }
 

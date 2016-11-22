@@ -245,14 +245,17 @@ a{
       color: white;
     }
     #next{
-      order: 3;
+      order: 4;
     }
     #previous{
       order: 2;
     }
+    #goto{
+      order: 3;
+    }
   // afficheur
     #afficheur{
-      order: 5;
+      order: 6;
       width: 95%;
     }
     .afg{
@@ -264,7 +267,7 @@ a{
       border-bottom: 0.4vmin dotted rgba(0, 0, 0, 0.39);
     }
     #containerResearch{
-      order: 6;
+      order: 7;
       display: flex;
       flex-direction: row;
     }
