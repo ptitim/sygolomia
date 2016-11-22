@@ -4,183 +4,189 @@ header('Content-Type: text/html; charset=utf-8');
 require_once("../config.php");
 require_once("../fonctionPhp.php");
 
-// import de la librairie id3 pour la lecture des metadonnees
-  require_once('../getid3/getid3.php');
-  require_once('../getid3/getid3.lib.php');
-  // import module audio
-  require_once('../getid3/module.audio.mp3.php');
-  require_once('../getid3/module.audio.ogg.php');
-  require_once('../getid3/module.audio.flac.php');
-  require_once('../getid3/module.audio.midi.php');
-  require_once('../getid3/module.audio.wavpack.php');
-  // import module video
-  require_once('../getid3/module.audio-video.flv.php');
-  require_once('../getid3/module.audio-video.mpeg.php');
-
-// var_dump($_GET);
-if(isset($_GET['maj']) AND $_GET['maj'] === "true"){
-    echo "appel";
-    majJson($bdd);
-    // header("location: index.php");
-    echo "<br/>";
-    echo "<a href='index.php>retour musiques</a>'";
-}
-
-$getID3 = new getID3;
-$getID3->encoding = 'UTF-8';
-
-if(isset($_POST['fileType']) && $_POST['fileType'] === "musique"){
-// file
-  $fileError = $_FILES['upload']['error'];
-  if($fileError === 0){
-    $fileName = $_FILES['upload']['name'];
-    $fileType = $_FILES['upload']['type'];
-    $fileSize = $_FILES['upload']['size'];
-    $filetmp_name = $_FILES['upload']['tmp_name'];
-  // type
-    $type = $_POST['type'];
-
-    $fileInfo = $getID3->analyze($filetmp_name);
-    $cheminTransfert = genereChemin($filetmp_name,$fileName, $type,$fileInfo);
-    $test = $bdd->prepare('SELECT id FROM musique WHERE chemin=:chemin');
-    $test->bindParam('chemin',$cheminTransfert,PDO::PARAM_STR);
-    $res = $test->execute();
-    echo $cheminTransfert."<br/>";
-    var_dump($res);
-    echo "<br/>";
-
-    if($res){
-      $donnee = $test->fetch();
-      var_dump(count($donnee));
-      if(count($donnee) <= 1){
-        $meta = getMeta($fileInfo,$fileName,$type,$cheminTransfert);
-        $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type,chemin) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type,:chemin)');
-
-        $resultat = move_uploaded_file($_FILES['upload']['tmp_name'], $cheminTransfert);
-
-        if($resultat){
-          $upload->execute($meta);
-          majJson($bdd);
-          echo "<br/>";
-          echo "fichier importer";
-        }else{
-          echo "Erreur lors de l'upload";
-        }
-        // header("Refresh:5;URL=index.php");
-      }else {
-        echo "<br/>";
-        echo "le fichier existe deja";
-      }
-    }
-
-    echo "<br/><a href='index.php'>retour</a>";
-  }else
-    echo $fileError;
-}
-
-if(isset($_POST['fileType']) && $_POST['fileType'] == "musiques"){
-  if($_POST['type'] == "artiste" OR $_POST['type'] == "ost" OR $_POST['type'] == "autres"){
-    $type = $_POST['type'];
-    foreach ($_FILES['uploads']['tmp_name'] as $key => $value) {
-      $fileName = $_FILES['uploads']['name'][$key];
-      $filetmp_name = $value;
-      $fileInfo = $getID3->analyze($filetmp_name);
-
-      $cheminTransfert = genereChemin($filetmp_name,$fileName, $type,$fileInfo);
-      echo $cheminTransfert."<br/>";
-
-      $test = $bdd->prepare('SELECT id FROM musique WHERE chemin=:chemin');
-      $test->bindParam('chemin',$cheminTransfert,PDO::PARAM_STR);
-      $res = $test->execute();
-
-      if($res){
-        $donnee = $test->fetch();
-        var_dump(count($donnee));
-        if(count($donnee)<=1){
-          $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type,chemin) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type,:chemin)');
-          $resultat = move_uploaded_file($filetmp_name, $cheminTransfert);
-
-          $meta = getMeta($fileInfo,$fileName,$type,$cheminTransfert);
-
-          if($resultat){
-            $upload->execute($meta);
-            echo "<br/>";
-            echo "fichier importer";
-          }else{
-            echo "Erreur lors de l'upload";
-          }
-          majJson($bdd);
-        }else {
-          echo "<br/>";
-          echo "le fichier existe deja";
-        }
-
-      }
-    }
-
-  }else {
-    echo "Type incorect";
-    echo "<br/>";
-  }
-  echo "<br/><a href='index.php'>retour</a>";
-}
-
-
-// genere le chemin de transfert et vrée les dossier si inexistant
-function genereChemin($filetmp_dir,$fileName,$type,$fileInfo){
-  $chemin = "../upload/";
-
-  if(!is_dir($chemin))
-    mkdir($chemin, 0777);
-
-  $chemin .= $type."/";
-  if(!is_dir($chemin))
-    mkdir($chemin, 0777);
-
-
-  $album = isset($fileInfo['tags_html']['id3v2']['album'][0]) ? $fileInfo['tags_html']['id3v2']['album'][0] : "inconnu";
-  $artist = isset($fileInfo['tags_html']['id3v2']['artist'][0]) ? $fileInfo['tags_html']['id3v2']['artist'][0] : "inconnu";
-
-  if($type === ARTIST OR $type === AUTRES){
-    $chemin .= $artist."/";
-    if(!is_dir($chemin))
-    mkdir($chemin,0755);
-
-    $chemin .= $album."/";
-    if(!is_dir($chemin))
-      mkdir($chemin, 0755);
-
-  }elseif ($type === OST) {
-    $chemin .= $album."/";
-    if(!is_dir($chemin))
-      mkdir($chemin, 0755);
-  }else {
-    throw new Exception("Type is incorrect", 1);
-  }
-  $chemin .= $fileName;
-  return $chemin;
-}
-
-function getMeta($fileInfo,$fileName,$type,$chemin){
-      $album = isset($fileInfo['tags_html']['id3v2']['album'][0]) ? $fileInfo['tags_html']['id3v2']['album'][0] : "inconnu";
-      $artist = isset($fileInfo['tags_html']['id3v2']['artist'][0]) ? $fileInfo['tags_html']['id3v2']['artist'][0] : "inconnu";
-      $duree = isset($fileInfo['playtime_seconds']) ? $fileInfo['playtime_seconds'] : "0";
-      $genre = isset($fileInfo['tags_html']['id3v2']['genre'][0]) ? $fileInfo['tags_html']['id3v2']['genre'][0] : "" ;
-      $titre = isset($fileInfo['tags_html']['id3v2']['title'][0]) ? $fileInfo['tags_html']['id3v2']['title'][0] : $fileName;
-      $titre = htmlspecialchars_decode($titre,ENT_DISALLOWED);
-      $album = htmlspecialchars_decode($album,ENT_DISALLOWED);
-      $artist= htmlspecialchars_decode($artist,ENT_DISALLOWED);
-
-      return [
-              'titre' => $titre,
-              'album' => $album,
-              'artiste' => $artist,
-              'genre' => $genre,
-              'nbrdecoute' => 0,
-              'duree' => $duree,
-              'type' => $type,
-              'chemin'=> $chemin];
-}
+// // import de la librairie id3 pour la lecture des metadonnees
+//   require_once('../../getid3/getid3.php');
+//   require_once('../../getid3/getid3.lib.php');
+//   // import module audio
+//   require_once('../../getid3/module.audio.mp3.php');
+//   require_once('../../getid3/module.audio.ogg.php');
+//   require_once('../../getid3/module.audio.flac.php');
+//   require_once('../../getid3/module.audio.midi.php');
+//   require_once('../../getid3/module.audio.wavpack.php');
+//   // import module video
+//   require_once('../../getid3/module.audio-video.flv.php');
+//   require_once('../../getid3/module.audio-video.mpeg.php');
+//
+// // var_dump($_GET);
+// if(isset($_GET['maj']) AND $_GET['maj'] === "true"){
+//     echo "appel";
+//     majJson($bdd);
+//     // header("location: index.php");
+//     echo "<br/>";
+//     echo "<a href='index.php>retour musiques</a>'";
+// }
+//
+// $getID3 = new getID3;
+// $getID3->encoding = 'UTF-8';
+//
+// if(isset($_POST['fileType']) && $_POST['fileType'] === "musique"){
+// // file
+//   $fileError = $_FILES['upload']['error'];
+//   if($fileError === 0){
+//     $fileName = $_FILES['upload']['name'];
+//     $fileType = $_FILES['upload']['type'];
+//     $fileSize = $_FILES['upload']['size'];
+//     $filetmp_name = $_FILES['upload']['tmp_name'];
+//   // type
+//     $type = $_POST['type'];
+//
+//     $fileInfo = $getID3->analyze($filetmp_name);
+//     $cheminTransfert = genereChemin($filetmp_name,$fileName, $type,$fileInfo);
+//     $test = $bdd->prepare('SELECT id FROM musique WHERE chemin=:chemin');
+//     $test->bindParam('chemin',$cheminTransfert,PDO::PARAM_STR);
+//     $res = $test->execute();
+//     echo $cheminTransfert."<br/>";
+//     var_dump($res);
+//     echo "<br/>";
+//
+//     if($res){
+//       $donnee = $test->fetch();
+//       var_dump(count($donnee));
+//       if(count($donnee) <= 1){
+//         $meta = getMeta($fileInfo,$fileName,$type,$cheminTransfert);
+//         $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type,chemin) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type,:chemin)');
+//
+//         $resultat = move_uploaded_file($_FILES['upload']['tmp_name'], $cheminTransfert);
+//
+//         if($resultat){
+//           $upload->execute($meta);
+//           majJson($bdd);
+//           echo "<br/>";
+//           echo "fichier importer";
+//         }else{
+//           echo "Erreur lors de l'upload";
+//         }
+//         // header("Refresh:5;URL=index.php");
+//       }else {
+//         echo "<br/>";
+//         echo "le fichier existe deja";
+//       }
+//     }
+//
+//     echo "<br/><a href='index.php'>retour</a>";
+//   }else
+//     echo $fileError;
+// }
+//
+// if(isset($_POST['fileType']) && $_POST['fileType'] == "musiques"){
+//   if($_POST['type'] == "artiste" OR $_POST['type'] == "ost" OR $_POST['type'] == "autres"){
+//     $type = $_POST['type'];
+//     foreach ($_FILES['uploads']['tmp_name'] as $key => $value) {
+//       $fileName = $_FILES['uploads']['name'][$key];
+//       $filetmp_name = $value;
+//       $fileInfo = $getID3->analyze($filetmp_name);
+//
+//       $cheminTransfert = genereChemin($filetmp_name,$fileName, $type,$fileInfo);
+//       echo $cheminTransfert."<br/>";
+//
+//       $test = $bdd->prepare('SELECT id FROM musique WHERE chemin=:chemin');
+//       $test->bindParam('chemin',$cheminTransfert,PDO::PARAM_STR);
+//       $res = $test->execute();
+//
+//       if($res){
+//         $donnee = $test->fetch();
+//         var_dump(count($donnee));
+//         if(count($donnee)<=1){
+//           $upload = $bdd->prepare('INSERT INTO musique (titre,album,artiste,genre,nbrdecoute,duree,type,chemin) VALUES (:titre,:album,:artiste,:genre,:nbrdecoute,:duree,:type,:chemin)');
+//           $resultat = move_uploaded_file($filetmp_name, $cheminTransfert);
+//
+//           $meta = getMeta($fileInfo,$fileName,$type,$cheminTransfert);
+//
+//           if($resultat){
+//             $upload->execute($meta);
+//             echo "<br/>";
+//             echo "fichier importer";
+//           }else{
+//             echo "Erreur lors de l'upload";
+//           }
+//           majJson($bdd);
+//         }else {
+//           echo "<br/>";
+//           echo "le fichier existe deja";
+//         }
+//
+//       }
+//     }
+//
+//   }else {
+//     echo "Type incorect";
+//     echo "<br/>";
+//   }
+//   echo "<br/><a href='index.php'>retour</a>";
+// }
+//
+//
+// // genere le chemin de transfert et vrée les dossier si inexistant
+// function genereChemin($filetmp_dir,$fileName,$type,$fileInfo){
+//   $chemin = "../../upload/";
+//
+//   if(!is_dir($chemin))
+//     mkdir($chemin, 0777);
+//
+//   $chemin .= $type."/";
+//   if(!is_dir($chemin))
+//     mkdir($chemin, 0777);
+//
+//
+//   $album = isset($fileInfo['tags_html']['id3v2']['album'][0]) ? $fileInfo['tags_html']['id3v2']['album'][0] : "inconnu";
+//   $artist = isset($fileInfo['tags_html']['id3v2']['artist'][0]) ? $fileInfo['tags_html']['id3v2']['artist'][0] : "inconnu";
+//
+//   if($type === ARTIST OR $type === AUTRES){
+//     $chemin .= $artist."/";
+//     if(!is_dir($chemin))
+//     mkdir($chemin,0755);
+//
+//     $chemin .= $album."/";
+//     if(!is_dir($chemin))
+//       mkdir($chemin, 0755);
+//
+//   }elseif ($type === OST) {
+//     $chemin .= $album."/";
+//     if(!is_dir($chemin))
+//       mkdir($chemin, 0755);
+//   }else {
+//     throw new Exception("Type is incorrect", 1);
+//   }
+//   $chemin .= $fileName;
+//   return $chemin;
+// }
+//
+// function getMeta($fileInfo,$fileName,$type,$chemin){
+//       $album = isset($fileInfo['tags_html']['id3v2']['album'][0]) ? $fileInfo['tags_html']['id3v2']['album'][0] : "inconnu";
+//       $artist = isset($fileInfo['tags_html']['id3v2']['artist'][0]) ? $fileInfo['tags_html']['id3v2']['artist'][0] : "inconnu";
+//       $duree = isset($fileInfo['playtime_seconds']) ? $fileInfo['playtime_seconds'] : "0";
+//       $genre = isset($fileInfo['tags_html']['id3v2']['genre'][0]) ? $fileInfo['tags_html']['id3v2']['genre'][0] : "" ;
+//       $titre = isset($fileInfo['tags_html']['id3v2']['title'][0]) ? $fileInfo['tags_html']['id3v2']['title'][0] : $fileName;
+//       $titre = htmlspecialchars_decode($titre,ENT_DISALLOWED);
+//       $album = htmlspecialchars_decode($album,ENT_DISALLOWED);
+//       $artist= htmlspecialchars_decode($artist,ENT_DISALLOWED);
+//       // $re = '/([a-zA-Z]+|\d+)/';
+//       // preg_match_all($re, $titre, $matches);
+//       // var_dump($matches);
+//       // $titre = join(" ",$matches[0]);
+//       $titre = mb_convert_encoding($titre,'UTF-8');
+//       echo "<br/> titre :".$titre."<br/>";
+//       var_dump(mb_detect_encoding($titre,"auto"));
+//       return [
+//               'titre' => $titre,
+//               'album' => $album,
+//               'artiste' => $artist,
+//               'genre' => $genre,
+//               'nbrdecoute' => 0,
+//               'duree' => $duree,
+//               'type' => $type,
+//               'chemin'=> $chemin];
+// }
 
 // renvoie les playlist pour l'utilisateur qui se connecte
 if(isset($_GET['playlist']) && $_GET['playlist'] === "true"){

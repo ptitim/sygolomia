@@ -71,7 +71,7 @@ function init(mode){
    // add event listenr keypress on window
    addEventListenerKeybord();
    afficheListe('m');
-   loadPlaylist("http://localhost/sygolomia/principal/createJson.php");
+   loadPlaylist("http://ptitim.esy.es/sygolomia/principal/createJson.php");
    ctm = new ContextMenuMusique();
    ctp = new ContextMenuPlaylist();
    window.addEventListener('click',link);
@@ -128,12 +128,12 @@ function createListe(listePrincipal){
 }
 
 function loadMusic(){
-  let url = "http://localhost/sygolomia/principal/donneeMusique.json";
+  let url = "http://ptitim.esy.es/sygolomia/principal/donneeMusique.json";
   loadData(url);
 }
 
 function loadVideo(){
-  let url = "http://localhost/sygolomia/principal/donneeMusique.json";
+  let url = "http://ptitim.esy.es/sygolomia/principal/donneeMusique.json";
   loadData(url);
 }
 
@@ -411,7 +411,7 @@ function testTruc(){
   if (textResearch == ""){
     backHome();
   }else {
-    ajax('POST','research.php',handleResearch,'text='+textResearch);
+    ajax('POST','http://ptitim.esy.es/sygolomia/principal/research.php',handleResearch,'text='+textResearch);
   }
 }
 
@@ -476,7 +476,7 @@ function changeTrack(mode){
     player.setSource(source);
     player.play();
     console.log("playing : ", source);
-    if(!findMus(source)){//findmus reécrit currentplay objet contenant les information du morceaux jouer
+    if(!findMus(source)){//findmus reÃ©crit currentplay objet contenant les information du morceaux jouer
       console.log("Error : track not found, source : ",source);
     }
     var reset = document.getElementsByClassName('playing');
@@ -546,7 +546,7 @@ function addTo(event){
     htmlele.className = htmlele.className.replace(" selectedPlaylist","");
   }, 800);
   let tmp = "idPlaylist="+this.dataset.idPlaylist+"&name="+this.dataset.namePlaylist+"&idTrack="+currentSelection.idTrack;
-  ajax('POST','import.php?addTo=true',handleResponseAddTo,tmp);
+  ajax('POST','http://ptitim.esy.es/sygolomia/principal/import.php?addTo=true',handleResponseAddTo,tmp);
 }
 
 function handleResponseAddTo(bool){
@@ -621,7 +621,7 @@ function dragdropPlaylist(event){
   this.className = this.className.replace('selectedPlaylist','');
 
   let tmp = "idPlaylist="+this.dataset.idPlaylist+"&name="+this.dataset.namePlaylist+"&idTrack="+currentSelection.idTrack;
-  ajax('POST','import.php?addTo=true',handleResponseAddTo,tmp);
+  ajax('POST','http://ptitim.esy.es/sygolomia/principal/import.php?addTo=true',handleResponseAddTo,tmp);
 }
 // end of drag function
 //

@@ -67,14 +67,14 @@ class Playlists{
         if(this.tabPlaylists.length > 0){
           tmp.htmlele.style.order = this.tabPlaylists[this.tabPlaylists.length-1].htmlele.style.order + 1;
         }else if (this.tabPlaylists.length == 0) {
-          tmp.htmlele.style.order = 1;
+          tmp.htmlele.style.order = 3;
         }
         this.tabPlaylists.push(tmp);
         this.cancel();
         this.container.appendChild(tmp.htmlele);
 
         let dataplaylist = JSON.stringify(this);
-        ajax('POST','import.php?playlist=true',function(){},dataplaylist);
+        ajax('POST','http://ptitim.esy.es/sygolomia/principal/import.php?playlist=true',function(){},dataplaylist);
     }else if ((event.type == "click" || (event.type == 'keyup' && event.key == "Enter" )) && regex.test(this.inputName.value) == false) {
         console.log("bonjour");
         this.inputName.style.backgroundColor = "rgba(228, 103, 103,1)";
@@ -133,7 +133,7 @@ function displayPlaylist(event){
   let idP = this.dataset.idPlaylist;
   this.className += " selectedPlaylist";
 
-  ajax('POST','import.php?getPlaylist=true',handlePlaylist,'playlistid='+idP);
+  ajax('POST','http://ptitim.esy.es/sygolomia/principal/import.php?getPlaylist=true',handlePlaylist,'playlistid='+idP);
 }
 
 // class musique{
@@ -227,7 +227,7 @@ class ContextMenuPlaylist extends ContextMenu{
     let _this = currentPlaylistSelected.htmlele;
     console.log("this",_this);
     if (confirm("Etes vous sure ?")) {
-      ajax('POST','import.php?deletePlaylist=true',function(){},'idPlaylist='+currentPlaylistSelected.idPlaylist);
+      ajax('POST','http://ptitim.esy.es/sygolomia/principal/import.php?deletePlaylist=true',function(){},'idPlaylist='+currentPlaylistSelected.idPlaylist);
       _this.parentElement.removeChild(_this);
       if(_this == currentPlaylistSelected.htmlele){
         backHome();
@@ -273,6 +273,7 @@ function contextMenuPlaylist(event){
   currentPlaylistSelected.htmlele = this;
   ctp.displayIt(event.clientX,event.clientY);
   console.log(currentPlaylistSelected);
+
 }
 
 //hide back button
