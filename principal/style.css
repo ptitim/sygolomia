@@ -134,7 +134,8 @@ a {
   min-width: 20vmax;
   max-width: 20vmax;
   text-align: left;
-  padding-left: 0.5vmax; }
+  padding-left: 0.5vmax;
+  overflow: hidden; }
 
 .duree {
   min-width: 5vmax;
